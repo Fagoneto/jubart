@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Inteligência</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">JubartData</div>
+      <nav>
+        <ul>
+          <li class="active">Overview</li>
+          <li>Market</li>
+          <li>Customer</li>
+          <li>Product</li>
+        </ul>
+      </nav>
+      <div class="year-selector">
+        <button class="year-btn" onclick="atualizarAno({{ ano_atual - 1 }})">{{ ano_atual -1 }}</button>
+        <button class="year-btn" onclick="atualizarAno({{ ano_atual }})">{{ ano_atual }}</button>
+      </div>
+      <div class="data-selector">
+        <label for="tipo-dado">Tipo de dado:</label>
+        <select id="tipo-dado" onchange="atualizarURL()">
+          <option value="impo" {% if tipo == 'impo' %}selected{% endif %}>Importação</option>
+          <option value="expo" {% if tipo == 'expo' %}selected{% endif %}>Exportação</option>
+        </select>
+      </div>
+      <div class="data-selector">
+        <label for="filtro">Filtrar por:</label>
+        <select id="filtro" onchange="atualizarURL()">
+            <option value="uf" {% if filtro == 'uf' %}selected{% endif %}>UF</option>
+            <option value="paises" {% if filtro == 'paises' %}selected{% endif %}>Países</option>
+            <option value="especie" {% if filtro == 'especie' %}selected{% endif %}>Espécie</option>
+            <option value="categoria" {% if filtro == 'categoria' %}selected{% endif %}>Categoria</option>
+            <option value="ncm" {% if filtro == 'ncm' %}selected{% endif %}>NCM</option>
+            <option value="descricaoncm" {% if filtro == 'descricaoncm' %}selected{% endif %}>Descrição NCM</option>
+        </select>
+      </div>
+      <div class="data-selector">
+        <label for="filtro_secundario">Agrupar por:</label>
+        <select id="filtro_secundario" onchange="atualizarURL()">
+            <!-- Será preenchido dinamicamente via JS -->
+        </select>
+      </div>
+      <div class="sidebar-footer">JubartData</div>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="main">
+      <header class="topbar">
+        <h1>Market Overview</h1>
+      </header>
+
+      
+      <!-- Linha de métricas -->
+      <section class="metrics">
+        <div class="metric-card">
+          <div class="metric-title">Volume (toneladas)</div>
+          <div class="metric-value">{{ volume }}</div>
+          <div class="metric-change" style="color: {{ cor_volume }}">
+            {{ var_volume }}
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Valor (USD x 1000)</div>
+          <div class="metric-value">{{ valor }}</div>
+          <div class="metric-change" style="color: {{ cor_valor }}">
+            {{ var_valor }}
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Preço Médio (USD/kg)</div>
+          <div class="metric-value">{{ preco }}</div>
+          <div class="metric-change" style="color: {{ cor_preco }}">
+            {{ var_preco }}
+          </div>
+        </div>
+      </section>
+
+    <!-- Linha superior de gráficos -->
+    <section class="charts-row">
+        <div class="chart chart-large" id="grafico_volume">{{ grafico_volume|safe }}</div>
+        <div class="chart chart-small" id="grafico_evolucao">{{ grafico_evolucao|safe }}</div>
+    </section>
+
+      <!-- Linha inferior de gráficos -->
+      <section class="charts-row charts-trio">
+        <div class="chart chart-small" id="grafico_categoria">{{ grafico_categoria|safe }}</div>
+        <div class="chart chart-small" id="grafico_segmento">{{ grafico_segmento|safe }}</div>
+        <div class="chart chart-small" id="grafico_quantidade">{{ grafico_quantidade|safe }}</div>
+      </section>
+    </main>
+  </div>
+    <script>
+    // Força o redimensionamento dos gráficos após o carregamento
+    window.addEventListener('load', function () {
+        window.dispatchEvent(new Event('resize'));
+    });
+    </script>
+    <script>
+      function atualizarAno(novoAno) {
+          const params = new URLSearchParams(window.location.search);
+          const tipo = document.getElementById("tipo-dado").value || params.get("tipo") || "impo";
+          const filtro = document.getElementById("filtro").value || params.get("filtro") || "uf";
+          const filtro_secundario = document.getElementById("filtro_secundario").value || params.get("filtro_secundario") || "paises";
+
+          const query = new URLSearchParams({
+              tipo: tipo,
+              ano: novoAno,
+              filtro: filtro,
+              filtro_secundario: filtro_secundario
+          }).toString();
+
+          location.href = "/?" + query;
+      }
+    </script>
+    <script>
+        const opcoesFiltro = ["uf", "paises", "especie", "categoria", "ncm", "descricaoncm"];
+
+        function atualizarURL() {
+            const tipo = document.getElementById("tipo-dado").value;
+            const params = new URLSearchParams(window.location.search);
+            const ano = params.get("ano") || "{{ ano_atual }}";
+            const filtro = document.getElementById("filtro").value;
+            const filtro_secundario = document.getElementById("filtro_secundario").value;
+
+            const query = new URLSearchParams({
+                tipo: tipo,
+                ano: ano,
+                filtro: filtro,
+                filtro_secundario: filtro_secundario
+            }).toString();
+
+            location.href = "/?" + query;
+        }
+
+        // Preencher o filtro_secundario com base na escolha do filtro principal
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const filtroSelecionado = params.get("filtro") || "uf";
+            const filtroSecSelecionado = params.get("filtro_secundario");
+
+            // Atualizar o valor selecionado do filtro principal
+            document.getElementById("filtro").value = filtroSelecionado;
+
+            // Preencher dinamicamente o filtro_secundario
+            const secundarioSelect = document.getElementById("filtro_secundario");
+            secundarioSelect.innerHTML = "";
+
+            const opcoesSecundarias = opcoesFiltro.filter(op => op !== filtroSelecionado);
+            opcoesSecundarias.forEach(op => {
+                const option = document.createElement("option");
+                option.value = op;
+                option.textContent = op.charAt(0).toUpperCase() + op.slice(1);
+                if (filtroSecSelecionado === op) {
+                    option.selected = true;
+                }
+                secundarioSelect.appendChild(option);
+            });
+        });
+    </script>
+
+</body>
+</html>
