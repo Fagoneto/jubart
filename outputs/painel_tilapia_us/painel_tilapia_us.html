@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Importações - JubartData</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-right: 2px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .sidebar select {
+            width: 100%;
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            width: 180px;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="../../imagens/logo_escura.png" alt="Logo JubartData" class="logo">
+        <h2>Filtros</h2>
+
+        <!-- Seletor de tipo -->
+        <label for="tipo-visualizacao">Visualizar por:</label>
+        <select id="tipo-visualizacao">
+            <option value="categoria" selected>Categoria</option>
+            <option value="pais">País</option>
+        </select>
+
+        <!-- Seletor dinâmico -->
+        <label for="detalhe" id="label-detalhe">Selecione:</label>
+        <select id="detalhe"></select>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Painel de Importações de Tilápia</h1>
+        <p><strong>Última atualização:</strong> <span id="data-atualizacao"></span></p>
+
+        <h3>Distribuição</h3>
+        <img id="grafico-distribuicao" src="../../imagens/imagens_tilapia/imagens_geral/categoria_volume_importacoes_tilapia_2024_2025.png" alt="Distribuição Geral">
+
+        <h3>Evolução</h3>
+        <img id="grafico-evolucao" src="../../imagens/imagens_tilapia/imagens_geral/evolucao_importacoes_tilapia_por_categoria_2024_2025.png" alt="Evolução Geral">
+
+        <div class="footer">Desenvolvido por JubartData</div>
+    </div>
+
+    <script>
+        // Carregar data de referência
+        fetch("periodo_referencia.txt")
+            .then(response => response.text())
+            .then(data => { document.getElementById("data-atualizacao").innerText = data.trim(); });
+
+        const tipoSelect = document.getElementById("tipo-visualizacao");
+        const detalheSelect = document.getElementById("detalhe");
+
+        // Listas normalizadas
+        const categorias = [
+            "carne_moida_de_tilapia_congelada",
+            "carne_moida_de_tilapia_fresca",
+            "files_de_tilapias_congeladas",
+            "files_de_tilapias_frescas",
+            "tilapias_defumadas_e_outras",
+            "tilapias_inteiras_congeladas",
+            "tilapias_inteiras_frescas"
+        ];
+
+        const paises = [
+            "Brazil",
+            "China",
+            "Colombia",
+            "Honduras",
+            "Indonesia",
+            "Mexico",
+            "Other_Asia",
+            "Thailand",
+            "Viet_Nam",
+            "World"
+        ];
+
+        // Função para carregar opções no seletor de detalhe
+        function carregarOpcoes(tipo) {
+            detalheSelect.innerHTML = ""; 
+            const lista = tipo === "categoria" ? categorias : paises;
+            detalheSelect.innerHTML = `<option value="">Todos (${tipo === "categoria" ? 'Categorias' : 'Países'})</option>`;
+            lista.forEach(item => {
+                const opt = document.createElement("option");
+                opt.value = item;
+                opt.textContent = item.replace(/_/g, " ");
+                detalheSelect.appendChild(opt);
+            });
+
+            // Atualizar gráficos gerais ao trocar tipo
+            if (tipo === "categoria") {
+                document.getElementById("grafico-distribuicao").src = "../../imagens/imagens_tilapia/imagens_geral/categoria_volume_importacoes_tilapia_2024_2025.png";
+                document.getElementById("grafico-evolucao").src = "../../imagens/imagens_tilapia/imagens_geral/evolucao_importacoes_tilapia_por_categoria_2024_2025.png";
+            } else {
+                document.getElementById("grafico-distribuicao").src = "../../imagens/imagens_tilapia/imagens_geral/pais_volume_importacoes_tilapia_2024_2025.png";
+                document.getElementById("grafico-evolucao").src = "../../imagens/imagens_tilapia/imagens_geral/evolucao_importacoes_tilapia_por_pais_2024_2025.png";
+            }
+        }
+
+        // Inicializar com categorias gerais
+        carregarOpcoes("categoria");
+
+        // Evento de mudança do seletor de tipo
+        tipoSelect.addEventListener("change", () => {
+            carregarOpcoes(tipoSelect.value);
+        });
+
+        // Evento para alterar gráficos ao escolher uma opção específica
+        detalheSelect.addEventListener("change", () => {
+            const tipo = tipoSelect.value;
+            const valor = detalheSelect.value;
+
+            if (valor === "") {
+                // Mostrar gráficos gerais conforme o tipo
+                if (tipo === "categoria") {
+                    document.getElementById("grafico-distribuicao").src = "../../imagens/imagens_tilapia/imagens_geral/categoria_volume_importacoes_tilapia_2024_2025.png";
+                    document.getElementById("grafico-evolucao").src = "../../imagens/imagens_tilapia/imagens_geral/evolucao_importacoes_tilapia_por_categoria_2024_2025.png";
+                } else {
+                    document.getElementById("grafico-distribuicao").src = "../../imagens/imagens_tilapia/imagens_geral/pais_volume_importacoes_tilapia_2024_2025.png";
+                    document.getElementById("grafico-evolucao").src = "../../imagens/imagens_tilapia/imagens_geral/evolucao_importacoes_tilapia_por_pais_2024_2025.png";
+                }
+            } 
+            else if (tipo === "categoria") {
+                document.getElementById("grafico-distribuicao").src =
+                    `../../imagens/imagens_tilapia/imagens_paises/${valor}_distribuicao_importacoes_tilapia_por_categoria_2024_2025.png`;
+                document.getElementById("grafico-evolucao").src =
+                    `../../imagens/imagens_tilapia/imagens_categoria/${valor}_evolucao_importacoes_tilapia_por_paises_2024_2025.png`;
+            } 
+            else if (tipo === "pais") {
+                document.getElementById("grafico-distribuicao").src =
+                    `../../imagens/imagens_tilapia/imagens_paises/${valor}_distribuicao_importacoes_tilapia_por_categoria_2024_2025.png`;
+                document.getElementById("grafico-evolucao").src =
+                    `../../imagens/imagens_tilapia/imagens_paises/${valor}_evolucao_importacoes_tilapia_por_categoria_2024_2025.png`;
+            }
+        });
+    </script>
+</body>
+</html>
