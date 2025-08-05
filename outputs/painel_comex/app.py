@@ -470,7 +470,16 @@ def gerar_grafico_evolucao_por_filtro(engine, tipo_dado, ano_selected, filtro):
 
 
 
+#@app.get("/", response_class=HTMLResponse)
+
 @app.get("/", response_class=HTMLResponse)
+def root(request: Request, tipo: str = "impo", ano: int = 2024, filtro: str = "uf", filtro_secundario: str = "paises"):
+    return overview(request, tipo, ano, filtro, filtro_secundario)
+
+@app.get("/overview", response_class=HTMLResponse)
+def overview(request: Request, tipo: str = "impo", ano: int = 2024, filtro: str = "uf", filtro_secundario: str = "paises"):
+    return index(request, tipo)
+
 def index(request: Request, tipo: str = "impo"):
     with engine.connect() as connection:
         ano_result = connection.execute(
@@ -487,13 +496,12 @@ def index(request: Request, tipo: str = "impo"):
     def formatar_valor(valor):
         return f"{valor:,.0f}".replace(",", ".")
     
-    def formatar_variacao(valor):
+    def format_variacao(valor):
         if pd.isna(valor):
-            return "▼ nan%", "red"
-        elif valor >= 0:
-            return f"▲ {valor:.1f}%", "green"
-        else:
-            return f"▼ {abs(valor):.1f}%", "red"
+            return "—", "black"
+        cor = "green" if valor >= 0 else "red"
+        sinal = "+" if valor >= 0 else "-"
+        return f"{sinal}{abs(valor):,.1f}%".replace(",", "."), cor
 
     df_metrica = painel_superior(engine, tipo, int(ano_selected))
 
@@ -506,12 +514,6 @@ def index(request: Request, tipo: str = "impo"):
     var_valor = df_metrica.loc["Valor (USD x 1000)", "Variação (%)"]
     var_preco = df_metrica.loc["Preço Médio (USD/kg)", "Variação (%)"]
 
-    def format_variacao(valor):
-        if pd.isna(valor):
-            return "—", "black"
-        cor = "green" if valor >= 0 else "red"
-        sinal = "+" if valor >= 0 else "-"
-        return f"{sinal}{abs(valor):,.1f}%".replace(",", "."), cor
 
     var_volume_valor, cor_volume = format_variacao(var_volume)
     var_valor_valor, cor_valor = format_variacao(var_valor)
@@ -568,3 +570,151 @@ def index(request: Request, tipo: str = "impo"):
         "cor_valor": cor_valor,
         "cor_preco": cor_preco,
     })
+
+
+@app.get("/market", response_class=HTMLResponse)
+def market(request: Request, tipo: str = "impo"):
+    with engine.connect() as connection:
+        ano_result = connection.execute(
+            text(f"SELECT MAX(ano) FROM pescados_dados_{tipo}")
+        ).fetchone()
+        ano_atual = ano_result[0]
+
+    ano_param = request.query_params.get("ano")
+    ano_selected = int(ano_param) if ano_param and ano_param.isdigit() else ano_atual
+    filtro = request.query_params.get("filtro", "paises")
+    filtro_secundario = request.query_params.get("filtro_secundario", "categoria")
+
+    def formatar_valor(valor):
+        return f"{valor:,.0f}".replace(",", ".")
+
+    def format_variacao(valor):
+        if pd.isna(valor):
+            return "—", "black"
+        cor = "green" if valor >= 0 else "red"
+        sinal = "+" if valor >= 0 else "-"
+        return f"{sinal}{abs(valor):,.1f}%".replace(",", "."), cor
+
+    # --- Métricas ---
+    df_metrica = painel_superior(engine, tipo, ano_selected)
+    volume = f"{df_metrica.at['Volume (toneladas)', ano_selected]:,.0f}".replace(",", ".")
+    valor = f"{df_metrica.at['Valor (USD x 1000)', ano_selected]:,.0f}".replace(",", ".")
+    preco = f"{df_metrica.at['Preço Médio (USD/kg)', ano_selected]:.3f}"
+
+    # --- Variações ---
+    var_volume_valor, cor_volume = format_variacao(df_metrica.loc["Volume (toneladas)", "Variação (%)"])
+    var_valor_valor, cor_valor = format_variacao(df_metrica.loc["Valor (USD x 1000)", "Variação (%)"])
+    var_preco_valor, cor_preco = format_variacao(df_metrica.loc["Preço Médio (USD/kg)", "Variação (%)"])
+
+    # --- Gráficos específicos do Market ---
+    fig_top_paises = gerar_grafico_por_filtro(engine, tipo, ano_selected, "paises")
+    fig_top_categorias = gerar_grafico_por_filtro(engine, tipo, ano_selected, "categoria")
+    fig_sunburst = gerar_grafico_distribuicao_hierarquica(engine, tipo, ano_selected, filtro, filtro_secundario)
+
+    html_top_paises = pio.to_html(fig_top_paises, include_plotlyjs="cdn", full_html=False)
+    html_top_categorias = pio.to_html(fig_top_categorias, include_plotlyjs=False, full_html=False)
+    html_sunburst = pio.to_html(fig_sunburst, include_plotlyjs=False, full_html=False)
+
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "pagina": "market",
+        "grafico_volume": html_top_paises,
+        "grafico_evolucao": html_top_categorias,
+        "grafico_categoria": html_sunburst,
+        "grafico_segmento": "",
+        "grafico_quantidade": "",
+        "tipo": tipo,
+        "ano_atual": ano_atual,
+        "ano_selected": ano_selected,
+        "filtro": filtro,
+        "filtro_secundario": filtro_secundario,
+        "volume": volume,
+        "valor": valor,
+        "preco": preco,
+        "var_volume": var_volume_valor,
+        "var_valor": var_valor_valor,
+        "var_preco": var_preco_valor,
+        "cor_volume": cor_volume,
+        "cor_valor": cor_valor,
+        "cor_preco": cor_preco,
+    })
+
+@app.get("/ncm", response_class=HTMLResponse)
+def ncm_page(request: Request, tipo: str = "impo", ano: int = 2024, filtro: str = "paises", ncm: str = None):
+    with engine.connect() as connection:
+        # Ano mais recente
+        ano_result = connection.execute(
+            text(f"SELECT MAX(ano) FROM pescados_dados_{tipo}")
+        ).fetchone()
+        ano_max = ano_result[0]
+
+        # Descobrir o mes_max para ano_max
+        mes_result = connection.execute(
+            text(f"SELECT MAX(mes) FROM pescados_dados_{tipo} WHERE ano = :ano"),
+            {"ano": ano_max}
+        ).fetchone()
+        mes_max = mes_result[0] if mes_result and mes_result[0] is not None else 12
+
+        # Buscar lista de NCMs únicos
+        query_ncm = text(f"""
+            SELECT DISTINCT ncm
+            FROM pescados_dados_{tipo}
+            WHERE ano = :ano
+            ORDER BY ncm
+        """)
+        ncm_list = [row[0] for row in connection.execute(query_ncm, {"ano": ano}).fetchall()]
+
+        grafico_ncm_html = ""
+        if ncm:
+            # Query: evolução anual preço médio do NCM selecionado agrupado pelo filtro
+            query_hist = text(f"""
+                SELECT 
+                    ano,
+                    {filtro} AS agrupador,
+                    SUM(CASE WHEN ano = :ano_max AND mes <= :mes_max THEN valor ELSE valor END) / 
+                    SUM(CASE WHEN ano = :ano_max AND mes <= :mes_max THEN kg ELSE kg END) AS preco_medio
+                FROM pescados_dados_{tipo}
+                WHERE ncm = :ncm
+                GROUP BY ano, {filtro}
+                ORDER BY ano
+            """)
+            df_hist = pd.read_sql_query(query_hist, connection, params={"ncm": ncm, "ano_max": ano_max, "mes_max": mes_max})
+
+            # Gráfico: evolução anual preço médio
+            fig = px.line(
+                df_hist,
+                x="ano",
+                y="preco_medio",
+                color="agrupador",
+                markers=True,
+                title=f"Evolução do Preço Médio Anual ({tipo.upper()}) para NCM {ncm}",
+                labels={"ano": "Ano", "preco_medio": "Preço Médio (USD/kg)", "agrupador": filtro.capitalize()}
+            )
+            fig.update_layout(template="plotly_white", height=400)
+            grafico_ncm_html = pio.to_html(fig, include_plotlyjs=False, full_html=False)
+
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "pagina": "ncm",
+        "ncm_list": ncm_list,
+        "grafico_volume": grafico_ncm_html,  # reaproveitamos a posição do gráfico maior
+        "grafico_evolucao": "",
+        "grafico_categoria": "",
+        "grafico_segmento": "",
+        "grafico_quantidade": "",
+        "tipo": tipo,
+        "ano_atual": ano_max,
+        "ano_selected": ano,
+        "filtro": filtro,
+        "filtro_secundario": "",
+        "volume": "",
+        "valor": "",
+        "preco": "",
+        "var_volume": "",
+        "var_valor": "",
+        "var_preco": "",
+        "cor_volume": "",
+        "cor_valor": "",
+        "cor_preco": ""
+    })
+
