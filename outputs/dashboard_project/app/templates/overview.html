@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>✅ Teste funcionando!</h1>
+<p>Tipo: {{ tipo }}</p>
+<p>Ano atual: {{ ano_atual }}</p>
+<p>Mês máximo: {{ mes_max }}</p>
+
+<hr>
+<h3>Gráfico:</h3>
+<div>{{ grafico | safe }}</div>
+
+<hr>
+<h3>Tabela:</h3>
+<div>{{ tabela | safe }}</div>
+{% endblock %}

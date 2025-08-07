@@ -1,0 +1,87 @@
+<!-- templates/layout.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Painel de Inteligência{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">JubartData</div>
+      <nav>
+        <ul>
+          <li class="{% if pagina == 'overview' %}active{% endif %}">
+            <a href="/overview?tipo={{ tipo }}&filtro={{ filtro }}&filtro_secundario={{ filtro_secundario }}">Overview</a>
+          </li>
+          <li class="{% if pagina == 'market' %}active{% endif %}">
+            <a href="/market?tipo={{ tipo }}&filtro={{ filtro }}&filtro_secundario={{ filtro_secundario }}">Market</a>
+          </li>
+          <li class="{% if pagina == 'ncm' %}active{% endif %}">
+            <a href="/ncm?tipo={{ tipo }}">NCM</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="year-selector">
+        <button class="year-btn" onclick="atualizarAno({{ ano_atual - 1 }})">{{ ano_atual -1 }}</button>
+        <button class="year-btn" onclick="atualizarAno({{ ano_atual }})">{{ ano_atual }}</button>
+      </div>
+
+      <div class="data-selector">
+        <label for="tipo-dado">Tipo:</label>
+        <select id="tipo-dado" onchange="atualizarURL()">
+          <option value="impo" {% if tipo == 'impo' %}selected{% endif %}>Importação</option>
+          <option value="expo" {% if tipo == 'expo' %}selected{% endif %}>Exportação</option>
+        </select>
+      </div>
+
+      <div class="data-selector">
+        <label for="filtro">Filtrar por:</label>
+        <select id="filtro" onchange="atualizarURL()">
+          {% for item in ['uf', 'paises', 'especie', 'categoria'] %}
+            <option value="{{ item }}" {% if filtro == item %}selected{% endif %}>{{ item.title() }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="data-selector">
+        <label for="filtro_secundario">Agrupar por:</label>
+        <select id="filtro_secundario" onchange="atualizarURL()">
+          {% for item in ['uf', 'paises', 'especie', 'categoria'] if item != filtro %}
+            <option value="{{ item }}" {% if filtro_secundario == item %}selected{% endif %}>{{ item.title() }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="sidebar-footer">JubartData</div>
+    </aside>
+
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <!-- Scripts compartilhados -->
+  <script>
+    function atualizarAno(novoAno) {
+      const params = new URLSearchParams(window.location.search);
+      const tipo = document.getElementById("tipo-dado").value || params.get("tipo") || "impo";
+      const filtro = document.getElementById("filtro").value || params.get("filtro") || "uf";
+      const filtro_secundario = document.getElementById("filtro_secundario").value || params.get("filtro_secundario") || "paises";
+      const query = new URLSearchParams({ tipo, ano: novoAno, filtro, filtro_secundario }).toString();
+      location.href = window.location.pathname + "?" + query;
+    }
+
+    function atualizarURL() {
+      const tipo = document.getElementById("tipo-dado").value;
+      const filtro = document.getElementById("filtro").value;
+      const filtro_secundario = document.getElementById("filtro_secundario").value;
+      const ano = new URLSearchParams(window.location.search).get("ano") || "{{ ano_atual }}";
+      const query = new URLSearchParams({ tipo, ano, filtro, filtro_secundario }).toString();
+      location.href = window.location.pathname + "?" + query;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        aside {
+            width: 200px;
+            background-color: #2c3e50;
+            padding: 20px;
+            height: 100vh;
+            color: white;
+        }
+        main {
+            flex: 1;
+            padding: 30px;
+        }
+        .sidebar-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar-nav li {
+            margin-bottom: 10px;
+        }
+        .sidebar-nav a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar-nav a:hover {
+            text-decoration: underline;
+        }
+        .tabela-sql {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .tabela-sql th, .tabela-sql td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .tabela-sql th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="sidebar-title">📊 Dashboard</div>
+        <div class="sidebar-nav">
+            <label for="tipo">Tipo de operação:</label><br>
+            <select id="tipo" onchange="trocarTipo()">
+                <option value="impo" {% if tipo == 'impo' %}selected{% endif %}>📥 Importação</option>
+                <option value="expo" {% if tipo == 'expo' %}selected{% endif %}>📤 Exportação</option>
+            </select>
+            <ul>
+                <li><a href="/overview?tipo={{ tipo }}">📊 Overview</a></li>
+                <li><a href="/market?tipo={{ tipo }}">📈 Market</a></li>
+            </ul>
+        </div>
+    </aside>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        function trocarTipo() {
+            const tipoSelecionado = document.getElementById('tipo').value;
+            const url = new URL(window.location.href);
+            url.searchParams.set("tipo", tipoSelecionado);
+            window.location.href = url.pathname + "?" + url.searchParams.toString();
+        }
+    </script>
+</body>
+</html>
