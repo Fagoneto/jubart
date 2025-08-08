@@ -6,11 +6,17 @@
 <p>Ano atual: {{ ano_atual }}</p>
 <p>Mês máximo: {{ mes_max }}</p>
 
-<hr>
-<h3>Gráfico:</h3>
-<div>{{ grafico | safe }}</div>
 
-<hr>
-<h3>Tabela:</h3>
-<div>{{ tabela | safe }}</div>
+<h2>📈 Histórico Anual de Volume</h2>
+
+<div class="graficos-duplos">
+    <div>{{ grafico | safe }}</div>
+    <div>{{ grafico_acumulado | safe }}</div>
+</div>
+
+
+<h2>Tabela:</h2>
+<div class="tabela-container">
+    {{ tabela | safe }}
+</div>
 {% endblock %}

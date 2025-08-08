@@ -1,58 +1,154 @@
+/* === ESTRUTURA GERAL === */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
-    display: flex;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
 }
 
-.sidebar {
-    width: 200px;
-    background-color: #333;
+/* === SIDEBAR FIXO === */
+aside {
+    width: 220px;
+    background-color: #2b60d8;
     color: white;
     padding: 20px;
     height: 100vh;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    border-radius: 0 20px 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
-.sidebar h2 {
+/* === CONTEÚDO PRINCIPAL === */
+main {
+    margin-left: 240px; /* ligeiramente maior para espaçar bem */
+    padding: 2rem;
+    background-color: #eaf0f7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    max-width: calc(100% - 240px); /* limita o espaço do conteúdo */
+}
+
+/* === TÍTULOS E METADADOS === */
+main h1, main h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-top: 0;
 }
 
-.sidebar ul {
+main h2 {
+    font-size: 1.4em;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* === GRÁFICOS LADO A LADO === */
+.graficos-duplos {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+}
+
+.graficos-duplos > div {
+    flex: 1;
+    min-width: 0;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.plotly-graph-div {
+    width: 100% !important;
+    height: auto !important;
+}
+
+
+.sidebar-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-nav {
+    margin-top: 10px;
+}
+
+.sidebar-nav label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.sidebar-nav select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: none;
+}
+
+.sidebar-nav ul {
     list-style: none;
     padding: 0;
 }
 
-.sidebar ul li {
-    margin-bottom: 10px;
+.sidebar-nav li {
+    margin-bottom: 12px;
 }
 
-.sidebar ul li a {
+.sidebar-nav a {
     color: white;
     text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.content {
-    padding: 20px;
-    flex-grow: 1;
+.sidebar-nav a:hover {
+    text-decoration: underline;
 }
 
+
+
+
+
+
+/* === TABELA === */
 .tabela-sql {
-    border-collapse: collapse;
     width: 100%;
-    margin-top: 20px;
-    font-size: 14px;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tabela-sql th, .tabela-sql td {
-    border: 1px solid #ccc;
-    padding: 6px;
+    border: 1px solid #ddd;
+    padding: 10px;
     text-align: center;
 }
 
 .tabela-sql th {
-    background-color: #2c3e50;
-    color: white;
+    background-color: #f2f2f2;
+    font-weight: bold;
 }
 
 .tabela-sql tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.tabela-sql tr:hover {
+    background-color: #e6f7ff;
 }
