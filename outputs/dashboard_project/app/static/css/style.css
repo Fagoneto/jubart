@@ -69,13 +69,19 @@ main h2 {
 }
 
 
-.sidebar-title {
-    font-size: 1.6em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.sidebar-logo img {
+  max-width: 200px;      /* ajuste se quiser maior/menor */
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
 }
 
 .sidebar-nav {
@@ -151,4 +157,160 @@ main h2 {
 
 .tabela-sql tr:hover {
     background-color: #e6f7ff;
+}
+
+/* GRID de KPIs */
+.kpi-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap:16px;
+  margin: 8px 0 24px 0;
+}
+
+/* Cartão */
+.kpi-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  padding: 18px 16px;
+  min-height: 110px;                 /* garante altura confortável */
+  display: flex;
+  flex-direction: column;
+  align-items: center;                /* centraliza horizontal */
+  justify-content: center;            /* centraliza vertical */
+  text-align: center;                 /* centraliza texto */
+  gap: 6px;
+}
+
+/* Título, valor, delta e subtítulo */
+.kpi-title {
+  font-size: 0.9rem;
+  color: #667085;
+}
+
+.kpi-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.kpi-delta {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.kpi-delta.up{
+  color:#0a7a2d;
+  background: #e6f7ed;
+}
+
+.kpi-delta.down{
+  color:#b20f0f;
+  background: #fde8e8;
+}
+
+.kpi-sub{
+  margin-top:6px;
+  font-size:.80rem;
+  color:#718096;
+}
+
+/* Gráficos lado a lado (já usado) */
+.graficos-duplos{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.filtro-distribuicao {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.filtro-form {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtro-form label {
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.filtro-form select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d0d7e2;
+  background: #f8fafc;
+}
+
+/* ===== Bloco de Seção / Distância abaixo dos gráficos ===== */
+.section-block { width: 100%; }
+.mt-lg { margin-top: 28px; }
+
+/* Cabeçalho da seção com seletor alinhado à esquerda */
+.section-header.left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+/* Barra de filtro (label + select) */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-bar label {
+  font-size: 0.95rem;
+  color: #334155;
+}
+.filter-bar select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d7e2;
+  background: #fff;
+}
+
+/* Grade com 3 colunas (responsivo) */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Cartão padrão dos gráficos */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(20, 60, 120, 0.08);
+  padding: 16px;
+  min-height: 360px;   /* dá “altura alvo” pra ficar uniforme */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Placeholder para espaços futuros */
+.card-placeholder .placeholder {
+  color: #6b7280;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+/* Responsivo: em telas menores, quebra em 1 ou 2 colunas */
+@media (max-width: 1200px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 780px) {
+  .grid-3 { grid-template-columns: 1fr; }
 }

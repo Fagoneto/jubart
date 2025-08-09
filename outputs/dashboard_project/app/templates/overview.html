@@ -1,22 +1,105 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>✅ Teste funcionando!</h1>
-<p>Tipo: {{ tipo }}</p>
-<p>Ano atual: {{ ano_atual }}</p>
-<p>Mês máximo: {{ mes_max }}</p>
+<h1>Painel do Pescado</h1>
+<p>Período de referência: {{ ano_selecionado }}/{{ mes_max }}</p>
 
 
+<!-- === KPI CARDS ======================================================= -->
+<div class="kpi-grid">
+  <!-- Volume -->
+  <div class="kpi-card">
+    <div class="kpi-title">Volume (toneladas)</div>
+    <div class="kpi-value">
+      {{ "{:,.0f}".format(kpi_volume or 0) | replace(",", ".") }}
+    </div>
+    {% if kpi_volume_delta is not none %}
+      <div class="kpi-delta {{ 'up' if kpi_volume_delta >= 0 else 'down' }}">
+        {{ (kpi_volume_delta * 100) | round(1) }}%
+      </div>
+    {% endif %}
+    <div class="kpi-sub">vs. mesmo período do ano anterior</div>
+  </div>
+
+  <!-- Valor -->
+  <div class="kpi-card">
+    <div class="kpi-title">Valor (US$ milhões)</div>
+    <div class="kpi-value">
+      {{ "{:,.1f}".format(kpi_valor or 0) | replace(",", "X") | replace(".", ",") | replace("X", ".") }}
+    </div>
+    {% if kpi_valor_delta is not none %}
+      <div class="kpi-delta {{ 'up' if kpi_valor_delta >= 0 else 'down' }}">
+        {{ (kpi_valor_delta * 100) | round(1) }}%
+      </div>
+    {% endif %}
+    <div class="kpi-sub">vs. mesmo período do ano anterior</div>
+  </div>
+
+  <!-- Preço Médio -->
+  <div class="kpi-card">
+    <div class="kpi-title">Preço Médio (US$/ton)</div>
+    <div class="kpi-value">
+      {% if kpi_preco is not none %}
+        {{ "{:,.0f}".format(kpi_preco) | replace(",", ".") }}
+      {% else %}
+        —
+      {% endif %}
+    </div>
+    {% if kpi_preco_delta is not none %}
+      <div class="kpi-delta {{ 'up' if kpi_preco_delta >= 0 else 'down' }}">
+        {{ (kpi_preco_delta * 100) | round(1) }}%
+      </div>
+    {% endif %}
+    <div class="kpi-sub">vs. mesmo período do ano anterior</div>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
 <h2>📈 Histórico Anual de Volume</h2>
-
 <div class="graficos-duplos">
-    <div>{{ grafico | safe }}</div>
-    <div>{{ grafico_acumulado | safe }}</div>
+  <div>{{ grafico | safe }}</div>
+  <div>{{ grafico_acumulado | safe }}</div>
 </div>
 
+<!-- === Filtro de distribuição ====================================== -->
+<!-- ===== Distribuição de Volume ===== -->
+<div class="section-block mt-lg">
 
-<h2>Tabela:</h2>
-<div class="tabela-container">
-    {{ tabela | safe }}
+  <!-- Cabeçalho da seção com o seletor alinhado à esquerda -->
+    <div class="donut-toolbar" style="margin-bottom: 20px;">
+        <label for="filtro">Distribuição por:</label>
+        <select id="filtro" onchange="trocarFiltro()">
+            {% for key, label in filtro_options.items() %}
+            <option value="{{ key }}" {{ 'selected' if filtro == key else '' }}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+
+  <!-- Grade 3 colunas para os cartões/gráficos -->
+  <div class="grid-3">
+    <div class="card">{{ grafico_distribuicao | safe }}</div>
+    <div class="card card-placeholder">
+      <div class="placeholder">Em breve</div>
+    </div>
+    <div class="card card-placeholder">
+      <div class="placeholder">Em breve</div>
+    </div>
+  </div>
 </div>
+
+<script>
+  function trocarFiltro() {
+    const sel = document.getElementById('filtro').value;
+    const url = new URL(window.location.href);
+    url.searchParams.set('filtro', sel);
+    // preserva outros params (tipo, ano, etc.)
+    window.location.href = url.pathname + "?" + url.searchParams.toString();
+  }
+</script>
+
+
+<!-- ================================================================ -->
 {% endblock %}

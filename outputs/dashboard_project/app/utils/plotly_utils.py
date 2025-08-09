@@ -9,7 +9,7 @@ def grafico_historico_volume_preco(df: pd.DataFrame, tipo_dado: str) -> str:
     fig.add_trace(go.Bar(
         x=df["ano"],
         y=df["volume_mes_corrente"] / 1_000_000,
-        name="Volume (milhões kg)",
+        name="Volume (x1000 ton)",
         marker_color="royalblue"
     ))
 
@@ -26,7 +26,7 @@ def grafico_historico_volume_preco(df: pd.DataFrame, tipo_dado: str) -> str:
     fig.update_layout(
         title=f"{'Importações' if tipo_dado == 'impo' else 'Exportações'} - Evolução do Volume e Preço Médio",
         xaxis=dict(title="Ano"),
-        yaxis=dict(title="Volume (milhões kg)", showgrid=False),
+        yaxis=dict(title="Volume (x1000 ton)", showgrid=False),
         yaxis2=dict(
             title="Preço Médio (USD/kg)",
             overlaying="y",
@@ -62,6 +62,7 @@ def grafico_evolucao_mensal(df_mensal: pd.DataFrame) -> str:
     df.rename(columns={'ano': 'year', 'mes': 'month', 'total_volume': 'volume'}, inplace=True)
     df['date'] = pd.to_datetime(df[['year', 'month']].assign(day=1))
     df['cumulative_volume'] = df.groupby('year')['volume'].cumsum()
+    df['cumulative_volume'] = df['cumulative_volume']/1000000
 
     current_year = df['year'].max()
     last_year = current_year - 1
@@ -98,7 +99,7 @@ def grafico_evolucao_mensal(df_mensal: pd.DataFrame) -> str:
     fig.update_layout(
         title='Evolução Mensal Acumulada de Volume',
         xaxis_title='Mês',
-        yaxis_title='Volume Acumulado (kg)',
+        yaxis_title='Volume Acumulado (x1000 ton)',
         plot_bgcolor='white',
         legend=dict(
             orientation="h",
@@ -120,4 +121,33 @@ def grafico_evolucao_mensal(df_mensal: pd.DataFrame) -> str:
         default_width="100%",      # Já força 100%
         default_height="420px"     # Ou outro valor fixo se preferir
     )
+
+
+
+
+def grafico_distribuicao_volume(
+    df: pd.DataFrame,
+    label: str = "País",
+    top_n: int = 20
+) -> str:
+    """Gera um donut da distribuição de volume por 'chave' (já agregada no DF)."""
+    if df is None or df.empty:
+        return "<div style='padding:12px'>Sem dados para este filtro.</div>"
+
+    # garante apenas top_n
+    df = df.nlargest(top_n, "volume_total")
+
+    fig = px.pie(
+        df,
+        names="chave",           # <- vindo do get_distribuicao_volume
+        values="volume_total",
+        hole=0.35,
+        title=f"Distribuição do Volume por {label}"
+    )
+    fig.update_traces(textposition="inside", textinfo="percent+label")
+    fig.update_layout(margin=dict(l=10, r=10, t=50, b=10), height=380)
+
+    return pio.to_html(fig, include_plotlyjs="cdn", full_html=False)
+
+
 
