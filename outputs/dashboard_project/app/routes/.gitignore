@@ -1,0 +1,13 @@
+# macOS / Python
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.env
+*.env
+app/.env
+outputs/**/.env
+
+# dados locais
+/data/
+*.sqlite
