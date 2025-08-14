@@ -10,6 +10,11 @@ from routes import overview, market
 # Se der erro de import, troque por:
 # from routes import overview, market
 
+from db.database import engine
+
+
+
+
 app = FastAPI(
     title="Jubart Dashboard Project",
     version="1.0.0"
@@ -45,3 +50,12 @@ def health():
 @app.get("/")
 async def root():
     return RedirectResponse(url="/overview")
+
+
+@app.get("/health/dbinfo")
+def dbinfo():
+    url = str(engine.url)
+    # oculta a senha
+    if engine.url.password:
+        url = url.replace(engine.url.password, "***")
+    return {"dialect": engine.url.get_backend_name(), "url": url}

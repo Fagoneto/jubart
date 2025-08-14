@@ -29,31 +29,21 @@ from sqlalchemy.orm import sessionmaker
 
 
 
-# --- monta a URL do banco de forma robusta ---
+def _get_db_url() -> str:
+    url = os.getenv("DATABASE_URL")
+    if url:
+        # Fly/Heroku costumam fornecer postgres:// ; normalize p/ SQLAlchemy 2.x
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+psycopg2://", 1)
+        return url
+    # Fallback só p/ dev local sem env; em produção queremos Postgres
+    return "sqlite:///./local.db"
 
-# def _build_db_url() -> str:
-#     url = os.getenv("DATABASE_URL")
-#     if url:
-#         return url
-#     user = os.getenv("user"); password = os.getenv("password")
-#     host = os.getenv("host"); port = os.getenv("port", "5432")
-#     name = os.getenv("database")
-#     if all([user, password, host, name]):
-#         return f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}"
-#     return "sqlite:///./local.db"
-
-
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./local.db")
-
+DATABASE_URL = _get_db_url()
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-
 engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
-# suas funções podem continuar iguais; ex.:
-# with engine.connect() as conn:
-#     conn.execute(text("..."))
 
 
 
