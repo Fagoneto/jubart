@@ -1,7 +1,8 @@
 fastapi
-uvicorn
+uvicorn[standard]
 jinja2
 psycopg2-binary
 python-dotenv
 plotly
 pandas
+SQLAlchemy>=2.0

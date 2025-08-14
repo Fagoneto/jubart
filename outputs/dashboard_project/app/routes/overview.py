@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app.db.database import (
+from db.database import (
     engine, 
     get_ano_mes_max, 
     get_dados_volume_preco,
@@ -10,14 +10,15 @@ from app.db.database import (
     get_kpis_resumo, 
     get_distribuicao_volume
 )
-from app.utils.plotly_utils import (
+from utils.plotly_utils import (
     grafico_historico_volume_preco, 
     grafico_evolucao_mensal, 
     grafico_distribuicao_volume
 )
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+#templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="templates")
 
 @router.get("/overview", response_class=HTMLResponse)
 async def overview_page(

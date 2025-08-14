@@ -1,30 +1,59 @@
 import os
 import pandas as pd
 from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
+from sqlalchemy.orm import sessionmaker
+# from dotenv import load_dotenv
 
 
-load_dotenv()
+# load_dotenv()
 
-# Constrói o engine
-user = os.getenv("user")
-password = os.getenv("password")
-host = os.getenv("host")
-port = os.getenv("port")
-database = os.getenv("database")
+# # Constrói o engine
+# user = os.getenv("user")
+# password = os.getenv("password")
+# host = os.getenv("host")
+# port = os.getenv("port")
+# database = os.getenv("database", "sqlite:///./local.db")
 
-# Verificação opcional (pode remover depois de testar)
-if not all([user, password, host, port, database]):
-    print("🚀 USER:", user)
-    print("🚀 PASSWORD:", password)
-    print("🚀 HOST:", host)
-    print("🚀 PORT:", port)
-    print("🚀 DATABASE:", database)
+# # Verificação opcional (pode remover depois de testar)
+# if not all([user, password, host, port, database]):
+#     print("🚀 USER:", user)
+#     print("🚀 PASSWORD:", password)
+#     print("🚀 HOST:", host)
+#     print("🚀 PORT:", port)
+#     print("🚀 DATABASE:", database)
 
-    raise ValueError("❌ Variáveis de ambiente não foram carregadas corretamente.")
+#     raise ValueError("❌ Variáveis de ambiente não foram carregadas corretamente.")
 
-# Cria engine de conexão com o PostgreSQL
-engine = create_engine(f"postgresql://{user}:{password}@{host}:{port}/{database}")
+# # Cria engine de conexão com o PostgreSQL
+# engine = create_engine(f"postgresql://{user}:{password}@{host}:{port}/{database}")
+
+
+
+# --- monta a URL do banco de forma robusta ---
+
+# def _build_db_url() -> str:
+#     url = os.getenv("DATABASE_URL")
+#     if url:
+#         return url
+#     user = os.getenv("user"); password = os.getenv("password")
+#     host = os.getenv("host"); port = os.getenv("port", "5432")
+#     name = os.getenv("database")
+#     if all([user, password, host, name]):
+#         return f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}"
+#     return "sqlite:///./local.db"
+
+
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./local.db")
+
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+# suas funções podem continuar iguais; ex.:
+# with engine.connect() as conn:
+#     conn.execute(text("..."))
 
 
 

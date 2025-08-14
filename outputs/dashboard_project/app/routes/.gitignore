@@ -11,3 +11,15 @@ outputs/**/.env
 # dados locais
 /data/
 *.sqlite
+
+# Logs
+*.log
+
+# Arquivos temporários de IDE
+.vscode/
+.idea/
+
+# Arquivos gerados localmente
+outputs/**/*.csv
+outputs/**/*.parquet
+outputs/**/*.xlsx
