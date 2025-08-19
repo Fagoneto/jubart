@@ -54,9 +54,21 @@ def _get_db_url() -> str:
 
 DATABASE_URL = _get_db_url()
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+#engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args=connect_args,
+    future=True
+)
 
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=True,  # <- importante p/ não “congelar” dados
+    bind=engine
+)
 
 
 

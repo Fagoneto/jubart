@@ -74,10 +74,23 @@ def dbinfo():
 #     resp.headers["Expires"] = "0"
 #     return resp
 
+# ===== MIDDLEWARE: Segurança + No-Cache p/ rotas dinâmicas =====
+NO_CACHE_PREFIXES = ("/overview", "/market", "/api", "/paineis", "/graficos")
+
 @app.middleware("http")
 async def security_and_cache_headers(request: Request, call_next):
     resp = await call_next(request)
+
+    # Segurança para iframes
     resp.headers["Content-Security-Policy"] = (
         "frame-ancestors https://jubartdata.com.br https://www.jubartdata.com.br;"
     )
+
+    # No-cache somente para rotas dinâmicas (HTML/JSON gerado)
+    if request.url.path.startswith(NO_CACHE_PREFIXES):
+        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+
     return resp
+
