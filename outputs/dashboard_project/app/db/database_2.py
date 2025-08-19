@@ -2,45 +2,6 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from pathlib import Path
-from dotenv import load_dotenv, find_dotenv
-
-
-
-# from dotenv import load_dotenv
-
-
-# load_dotenv()
-
-# # Constrói o engine
-# user = os.getenv("user")
-# password = os.getenv("password")
-# host = os.getenv("host")
-# port = os.getenv("port")
-# database = os.getenv("database", "sqlite:///./local.db")
-
-# # Verificação opcional (pode remover depois de testar)
-# if not all([user, password, host, port, database]):
-#     print("🚀 USER:", user)
-#     print("🚀 PASSWORD:", password)
-#     print("🚀 HOST:", host)
-#     print("🚀 PORT:", port)
-#     print("🚀 DATABASE:", database)
-
-#     raise ValueError("❌ Variáveis de ambiente não foram carregadas corretamente.")
-
-# # Cria engine de conexão com o PostgreSQL
-# engine = create_engine(f"postgresql://{user}:{password}@{host}:{port}/{database}")
-# --- NOVO: carregar .env de forma robusta ---
-_env_path = find_dotenv()
-if not _env_path:
-    _env_path = Path(__file__).resolve().parents[2] / ".env"
-if Path(_env_path).exists():
-    load_dotenv(_env_path)
-else:
-    load_dotenv()
-# --------------------------------------------
-
 
 def _get_db_url() -> str:
     url = os.getenv("DATABASE_URL")
@@ -56,9 +17,6 @@ DATABASE_URL = _get_db_url()
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-
 
 def get_ano_mes_max(nome_tabela: str) -> tuple[int, int] | tuple[None, None]:
     """
