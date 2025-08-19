@@ -14,7 +14,6 @@ from routes import pages
 
 from db.database import engine
 
-
 app = FastAPI(
     title="Jubart Dashboard Project",
     version="1.0.0"
