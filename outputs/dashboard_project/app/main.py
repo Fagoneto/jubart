@@ -3,16 +3,21 @@ from fastapi import Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+import pathlib
+from fastapi.staticfiles import StaticFiles
+
+from app.routes import overview, market, pages
+from app.db.database import engine
 
 # IMPORTS DAS ROTAS
 # Se sua app estiver estruturada como .../app/main.py e .../app/routes/*.py
 # use a linha abaixo:
-from routes import overview, market
-from routes import pages
+# from routes import overview, market
+# from routes import pages
 # Se der erro de import, troque por:
 # from routes import overview, market
 
-from db.database import engine
+from app.db.database import engine
 
 app = FastAPI(
     title="Jubart Dashboard Project",
@@ -30,9 +35,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+BASE_DIR = pathlib.Path(__file__).resolve().parent  # = app/
+STATIC_DIR = BASE_DIR / "static"
 # ===== STATIC =====
 # Como main.py está dentro de app/, a pasta estática é "static" (irmã de main.py).
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 # Arquivos estáticos
 #app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
@@ -94,3 +101,20 @@ async def security_and_cache_headers(request: Request, call_next):
 
     return resp
 
+
+# em app/main.py (ou num router de health)
+from sqlalchemy import text
+from fastapi.responses import JSONResponse
+from app.db.database import engine
+
+@app.get("/health/maxperiod")
+def health_maxperiod():
+    sql = text("""
+        SELECT ano, mes
+        FROM pescados_dados_impo   -- ajuste o nome da tabela
+        ORDER BY ano DESC, mes DESC
+        LIMIT 1
+    """)
+    with engine.connect() as conn:
+        row = conn.execute(sql).one()
+    return JSONResponse({"ano": int(row.ano), "mes": int(row.mes)})

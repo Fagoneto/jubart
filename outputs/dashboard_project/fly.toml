@@ -1,0 +1,27 @@
+app = "jubart-dashboard"
+primary_region = "gru"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_start_machines = true
+  auto_stop_machines = false   # <- mude para false
+  min_machines_running = 1     # <- mude para 1
+  processes = ["app"]
+
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[checks]
+  [checks.health]
+    port = 8080
+    type = "http"
+    interval = "15s"
+    timeout = "3s"
+    path = "/health"
+
+[processes]
+  app = "uvicorn app.main:app --host 0.0.0.0 --port 8080"
