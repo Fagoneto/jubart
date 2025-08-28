@@ -200,31 +200,62 @@ def get_dados_volume_preco(engine, tipo_dado: str, ano_final: int, mes_limite: i
 
 #     return df
 
-def get_dados_evolucao_mensal(engine, tipo_dado: str, ano_final: int, mes_limite: int | None = None) -> pd.DataFrame:
+# def get_dados_evolucao_mensal(engine, tipo_dado: str, ano_final: int, mes_limite: int | None = None) -> pd.DataFrame:
+#     ano_min = ano_final - 5
+#     nome_tabela = f"pescados_dados_{tipo_dado}"
+
+#     with engine.connect() as connection:
+#         if mes_limite is None:
+#             mes_result = connection.execute(
+#                 text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano = :ano"),
+#                 {"ano": ano_final}
+#             ).fetchone()
+#             mes_limite = mes_result[0] if mes_result and mes_result[0] is not None else 12
+
+#         query = text(f"""
+#             SELECT ano, mes, SUM(kg) AS total_volume
+#             FROM {nome_tabela}
+#             WHERE ano BETWEEN :ano_min AND :ano_final
+#               AND mes <= :mes_limite
+#             GROUP BY ano, mes
+#             ORDER BY ano, mes
+#         """)
+#         df = pd.read_sql_query(query, con=connection, params={
+#             "ano_min": ano_min, "ano_final": ano_final, "mes_limite": mes_limite
+#         })
+
+#     return df
+# app/db/database.py (ou onde estiver a função)
+def get_dados_evolucao_mensal(
+    engine,
+    tipo_dado: str,
+    ano_final: int,
+    mes_limite: int | None = None,   # mantido só p/ compatibilidade
+) -> pd.DataFrame:
+
     ano_min = ano_final - 5
     nome_tabela = f"pescados_dados_{tipo_dado}"
 
     with engine.connect() as connection:
-        if mes_limite is None:
-            mes_result = connection.execute(
-                text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano = :ano"),
-                {"ano": ano_final}
-            ).fetchone()
-            mes_limite = mes_result[0] if mes_result and mes_result[0] is not None else 12
-
+        # Sem aplicar limite: anos anteriores vão até dez/dezembro,
+        # e o ano_final vai até o último mês existente na tabela.
         query = text(f"""
             SELECT ano, mes, SUM(kg) AS total_volume
             FROM {nome_tabela}
             WHERE ano BETWEEN :ano_min AND :ano_final
-              AND mes <= :mes_limite
             GROUP BY ano, mes
             ORDER BY ano, mes
         """)
-        df = pd.read_sql_query(query, con=connection, params={
-            "ano_min": ano_min, "ano_final": ano_final, "mes_limite": mes_limite
-        })
+
+        df = pd.read_sql_query(
+            query,
+            con=connection,
+            params={"ano_min": ano_min, "ano_final": ano_final},
+        )
 
     return df
+
+
 
 
 # def get_kpis_resumo(engine, tipo: str, ano_final: int) -> dict:
