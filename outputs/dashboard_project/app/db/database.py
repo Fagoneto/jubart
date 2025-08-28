@@ -119,7 +119,7 @@ def get_dados_evolucao_mensal(
     engine,
     tipo_dado: str,
     ano_final: int,
-    mes_limite: int | None = None,   # mantido só p/ compatibilidade
+    #mes_limite: int | None = None,   # mantido só p/ compatibilidade
 ) -> pd.DataFrame:
 
     ano_min = ano_final - 5
