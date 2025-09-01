@@ -1,0 +1,16 @@
+:root{
+  --ink:#0f172a;            /* texto principal (navy/charcoal) */
+  --muted:#475569;          /* texto secundário */
+  --line:#e5e7eb;           /* bordas suaves */
+  --panel:#f6f7fb;          /* fundos clarinhos de seção */
+}
+
+.section-title{letter-spacing:-.02em;font-weight:800}
+.lead-muted{color:var(--muted)}
+.card-soft{border:1px solid var(--line);border-radius:16px}
+.block-soft{background:var(--panel);border:1px solid var(--line);border-radius:16px}
+.btn-primary-exec{background:#0f172a;border-color:#0f172a}
+.btn-primary-exec:hover{filter:brightness(.92)}
+.btn-outline-exec{border-color:#0f172a;color:#0f172a}
+.btn-outline-exec:hover{background:#0f172a;color:#fff}
+.badge-neutral{background:#f1f5f9;border:1px solid var(--line);color:#0f172a}
