@@ -1,185 +1,669 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VRT33DJH8L"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JubartData — Inteligência de Mercado no Brasil</title>
+  <meta name="description" content="Coleta automatizada de dados de produtos, preços e promoções no varejo brasileiro. Relatórios estratégicos, dashboards e monitoramento contínuo." />
+  <link rel="icon" href="imagens/cauda_jubart.png" />
 
-    // Google Analytics 4
-    gtag('config', 'G-VRT33DJH8L');
-
-    // Google Ads (conversões)
-    gtag('config', 'AW-17498337789');
-  </script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JubartData</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/custom.css">
   <style>
-    a > article:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    :root{
+    --bg:#1f2426; --ink:#0b5563; --brand:#f2b705;
+    --card:#ffffff; --muted:#6b7280; --light:#eef2f5; --ink-2:#0f1315;
     }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;
+    color:#0e141b; background:var(--light);
+    }
+    a{color:var(--ink);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1100px;margin:auto;padding:24px}
+
+    /* NAV: brand à esquerda, idiomas à direita */
+    .nav{
+    position:sticky; top:0; z-index:50;
+    background:#0f1315; border-bottom:1px solid #0b1a20;
+    }
+    .nav .wrap{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:10px 24px;
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{height:30px}
+    .brand span{color:#f9fafb; font-weight:800; letter-spacing:.4px}
+
+    /* Pílulas de idioma (usar SVG para não ter fundo branco) */
+    /* Seletor de idioma no topo direito */
+    .lang-toggle {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-left:auto; /* empurra para direita */
+    }
+
+    /* Botões */
+    .lang-toggle button {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    padding:6px 12px;
+    border-radius:12px;
+    font-weight:700;
+    letter-spacing:.3px;
+    background:transparent;
+    border:1px solid #2b3a40;
+    color:#e2e8f0;
+    transition:all .2s ease-in-out;
+    }
+
+    /* Bandeiras coloridas */
+    .lang-toggle .flag {
+    width:20px;
+    height:14px;
+    display:inline-block;
+    object-fit:cover;
+    border-radius:2px;
+    box-shadow:0 0 2px rgba(0,0,0,.25); /* leve destaque */
+    }
+
+    /* Estado ativo */
+    .lang-toggle button.active {
+    background:var(--brand);
+    color:#0b1a20;
+    border-color:var(--brand);
+    }
+    .lang-toggle button.active .flag {
+    box-shadow:0 0 0 2px rgba(0,0,0,.15);
+    }
+
+    /* Hover */
+    .lang-toggle button:hover:not(.active) {
+    border-color:#475569;
+    background:rgba(255,255,255,.06);
+    }
+
+    /* HERO limpo e consistente (duas colunas) */
+    .hero{
+    color:#fff;
+    background:linear-gradient(180deg,#0f1315 0%, #1f2426 85%);
+    padding:48px 0;
+    }
+    .hero .wrap{
+    display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);
+    gap:28px; align-items:center; max-width:1100px; margin:auto; padding:0 24px;
+    }
+    .h1{font-size:clamp(32px,5vw,48px); line-height:1.12; margin:0 0 8px}
+    .lead{font-size:clamp(16px,2vw,19px); color:#d6dee3; margin:0}
+
+    /* Logo do hero (direita) */
+    .hero-logo img{
+    width:100%; max-width:520px; display:block; margin:auto;
+    filter:drop-shadow(0 10px 24px rgba(0,0,0,.45));
+    }
+
+    /* Chips e CTAs (se usar) */
+    .chips{display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 18px}
+    .chip{
+    display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); font-weight:600
+    }
+    .chip small{opacity:.85}
+    .cta{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{padding:12px 18px; border-radius:12px; border:2px solid transparent; font-weight:700}
+    .btn-primary{background:var(--brand); color:#0b1a20; border-color:var(--brand)}
+    .btn-outline{background:transparent; border:none; color:#e2e8f0; text-decoration:underline; padding:8px 0}
+
+    /* Seções padrão */
+    .section{padding:26px 0}
+    .section-title{font-size:22px; margin:0 0 8px; position:relative}
+    .section-title::after{content:""; display:block; width:64px; height:4px; background:var(--brand); border-radius:2px; margin-top:6px}
+    .muted{color:var(--muted); font-size:14px}
+    .grid{display:grid; gap:18px}
+    .g-2{grid-template-columns:repeat(2,1fr)}
+    .g-3{grid-template-columns:repeat(3,1fr)}
+    .card{background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:20px}
+    .list{margin:8px 0 0 0; padding:0; list-style:none}
+    .list li{padding:6px 0}
+
+    /* Report destacado */
+    .report-hero{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; align-items:center}
+    .report-hero img{width:100%; max-width:560px; border-radius:14px}
+    .proofs{display:flex; gap:12px; flex-wrap:wrap}
+    .proof{background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:8px 12px; font-size:14px}
+
+    /* Idiomas (show/hide) */
+    body [lang]{display:none}
+    body [lang].active{display:block}
+
+    /* Breakpoints */
+    @media (max-width:900px){
+    .g-2,.g-3{grid-template-columns:1fr}
+    .report-hero{grid-template-columns:1fr}
+    }
+    @media (max-width:760px){
+    .hero .wrap{grid-template-columns:1fr}
+    .hero-logo{display:none} /* mantém o topo limpo no mobile */
+    }
+
+    /* Footer */
+    .footer{padding:32px 0; color:#cbd5e1; background:#0f1315; border-top:1px solid #0b1a20}
+
+    /* ===== Intelligence Cards ===== */
+    .intel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    @media (max-width:900px){.intel-grid{grid-template-columns:1fr}}
+
+    .intel-card{
+    display:flex;flex-direction:column;
+    background:#fff;border:1px solid #e5e7eb;border-radius:16px;
+    overflow:hidden;
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+    }
+    .intel-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(16,24,40,.08);border-color:#d7dde3}
+
+    .intel-body{padding:16px}
+
+    /* thumb padrão (corta para preencher) */
+    .intel-thumb{
+    width:100%; height:180px; object-fit:cover;
+    border-radius:12px 12px 0 0; display:block; background:#f3f5f7;
+    }
+
+    /* thumb sem corte (mostra tudo) — use só no dashboard */
+    .intel-thumb--contain{
+    object-fit:contain;           /* mostra a imagem inteira */
+    background:#fff;              /* fundo branco atrás do “letterbox” */
+    padding:8px;                  /* respiro ao redor do gráfico */
+    height:200px;                 /* um pouco mais alto para leitura */
+    }
+
+    /* responsivo */
+    @media (max-width:600px){
+    .intel-thumb{height:160px}
+    .intel-thumb--contain{height:180px; padding:6px}
+    }
+
+    .meta{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+    .badge-soft{
+    display:inline-block;background:#f8fafc;border:1px solid #e5e7eb;border-radius:999px;
+    padding:4px 8px;font-size:12px;color:#334155;font-weight:600
+    }
+
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn-sm{padding:10px 14px;border-radius:10px;border:2px solid transparent;font-weight:700;font-size:14px}
+    .btn-primary.btn-sm{background:var(--brand);color:#0b1a20;border-color:var(--brand)}
+    .btn-ghost{background:transparent;border:1px solid #e5e7eb;color:#0f172a}
+    .btn-ghost:hover{border-color:#cbd5e1}
+
+    /* Grid 2x2 com boa leitura */
+    .outcomes{
+      list-style:none; margin:14px 0 0; padding:0;
+      display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width:800px){ .outcomes{ grid-template-columns:1fr } }
+
+    /* Cartões “chip” com hierarquia */
+    .outcome{
+      display:flex; align-items:flex-start; gap:12px;
+      background:#fff; border:1px solid #e5e7eb; border-radius:14px;
+      padding:14px 16px;
+      box-shadow:0 6px 18px rgba(16,24,40,.06);
+      transition:transform .15s, box-shadow .15s, border-color .15s;
+    }
+    .outcome:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(16,24,40,.10); border-color:#d7dde3 }
+
+    /* Ícone com cor de destaque */
+    .outcome .ico{
+      flex:0 0 auto;
+      display:grid; place-items:center;
+      width:34px; height:34px; border-radius:10px;
+      background:linear-gradient(180deg, rgba(242,183,5,.18), rgba(242,183,5,.08));
+      color:#111827; font-weight:800;
+      border:1px solid rgba(242,183,5,.45);
+    }
+
+    /* Tipografia */
+    .outcome .txt strong{
+      display:block; font-weight:800; letter-spacing:.2px; margin-bottom:2px;
+    }
+    .outcome .txt small{
+      display:block; color:#475569; line-height:1.5;
+    }
+
+    .highlight-intro{
+      font-size: 18px;               /* maior que muted normal */
+      line-height: 1.6;
+      color: #111827;                /* mais legível */
+      background: #fffaf0;           /* leve tom quente */
+      border-left: 6px solid var(--brand); /* faixa laranja */
+      padding: 16px 20px;
+      margin: 18px 0 28px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.05);
+    }
+
+
+
+
   </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#">
-      <img src="imagens/logo_escura.png" alt="Logo Jubart" width="180">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
+<!-- NAV (apenas as bandeiras) -->
+<nav class="nav">
+  <div class="wrap">
+    <div class="lang-toggle">
+    <button id="pt" class="active" aria-label="Português (Brasil)">
+        <img class="flag" src="br_flag.png" alt="PT" onerror="this.replaceWith(document.createTextNode('🇧🇷'))"> PT
     </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Início</a></li>
-        <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
-        <li class="nav-item"><a class="nav-link" href="dashboards.html">Dashboards</a></li> <!-- por enquanto projetos.html -->
-        <li class="nav-item"><a class="nav-link" href="contato.html">Contato</a></li>
-      </ul>
+    <button id="en" aria-label="English (United States)">
+        <img class="flag" src="us_flag.png" alt="EN" onerror="this.replaceWith(document.createTextNode('🇺🇸'))"> EN
+    </button>
     </div>
   </div>
 </nav>
 
-<!-- Hero Section -->
-<header class="bg-light text-center py-5">
-  <div class="container">
-    <h1 class="display-5">Inteligência para decisões estratégicas</h1>
-    <p class="lead">Dashboards, análises e estudos de mercado com foco em alimentos e comércio exterior.</p>
-    <div class="mt-3">
-      <a href="dashboards.html" class="btn btn-primary btn-lg me-2">Ver todos os dashboards</a>
-      <a href="servicos.html" class="btn btn-outline-secondary btn-lg">Conheça nossos outros serviços</a>
+<!-- HERO PT -->
+<header class="hero active" lang="pt">
+  <div class="container wrap hero-grid">
+    <div>
+      <h1 class="h1">Inteligência Aplicada ao Varejo Brasileiro</h1>
+      <p class="lead">Transformando dados em margens, expansão de mercado e crescimento sustentável. </p>
+    </div>
+    <div class="hero-logo">
+      <img src="imagens/logo_escura.png" alt="JubartData" />
     </div>
   </div>
 </header>
 
 
-<!-- Serviços -->
-<section class="py-5" id="servicos">
-  <div class="container">
-    <h2 class="section-title h1 mb-3">O que fazemos</h2>
-    <p class="text-secondary mb-4">Soluções completas para transformar dados em decisões.</p>
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><i class="bi bi-cart-check fs-3"></i><h5 class="mt-2">Monitoramento de Preços</h5><p class="text-secondary">Coleta automatizada em varejo e atacarejo; promoções, dispersão geográfica e clusters de lojas.</p></div></div></div>
-      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><i class="bi bi-globe2 fs-3"></i><h5 class="mt-2">Comércio Exterior</h5><p class="text-secondary">Dashboards de importações/exportações, tarifas, volumes e preços. Integração com Bacen, IBGE e Comtrade.</p></div></div></div>
-      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><i class="bi bi-file-earmark-bar-graph fs-3"></i><h5 class="mt-2">Estudos Sob Medida</h5><p class="text-secondary">Pesquisas setoriais, viabilidade, sizing e posicionamento de marca.</p></div></div></div>
-      <div class="col-md-6 col-lg-3"><div class="card h-100"><div class="card-body"><i class="bi bi-newspaper fs-3"></i><h5 class="mt-2">Observatório de Notícias</h5><p class="text-secondary">Clipping inteligente com análise de impacto em consumo, produção e varejo.</p></div></div></div>
+<!-- HERO EN -->
+<header class="hero" lang="en">
+  <div class="container wrap">
+    <div class="hero-copy">
+      <h1 class="h1">Intelligence Applied to Brazilian Retail</h1>
+      <p class="lead">Turning data into margins, market expansion and sustainable growth.</p>
+    </div>
+    <div class="hero-logo">
+      <img src="imagens/logo_escura.png" alt="JubartData">
     </div>
   </div>
-</section>
-
-<!-- Última Publicação -->
+</header>
 
 
-<!-- Última Publicação -->
-<section id="ultima-publicacao" class="py-5 bg-light">
-  <div class="container" style="max-width:1100px;">
-    <div class="card border-0 shadow-sm p-4 p-md-5">
-      <div class="row align-items-center g-4">
-        
-        <!-- Texto -->
-        <div class="col-lg-7">
-          <span class="badge rounded-pill text-primary border border-primary bg-light-subtle px-3 py-2">
-            Novo
-            
-          </span>
-          <h2 class="h3 mb-2">Última Publicação: Relatório do Mercado de Bacalhau</h2>
-          <p class="text-muted mb-3">
-            Amostra de <strong>1.267 registros</strong> em <strong>175 lojas</strong> de
-            <strong>70 cidades</strong> em <strong>16 estados</strong> (data da pesquisa: 
-            <strong>29 de julho de 2025</strong>). O estudo aborda preços, dispersão regional, clusters de lojas 
-            e estratégias promocionais no mercado varejista de bacalhau no Brasil.
-          </p>
-          <a class="btn btn-primary d-inline-flex align-items-center"
-            href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf"
-            target="_blank" rel="noopener">
-            <i class="bi bi-file-earmark-text me-2"></i>
-            Baixar Relatório Completo (PDF em Inglês)
-          </a>
+
+
+
+  <!-- ====================== CONTEÚDO PT ====================== -->
+  <main lang="pt" class="active">
+    <section class="section container" id="o-que-fazemos">
+      <h2 class="section-title">O que fazemos</h2>
+      <p class="highlight-intro">Relatórios estratégicos que apoiam decisões de posicionamento, expansão e competitividade no Brasil — combinando contextualização do cenário, monitoramento do varejo e pesquisa de mercado com agentes.</p>
+
+      <div class="grid g-3">
+        <div class="card">
+          <h3>Contextualização do cenário</h3>
+          <ul class="list">
+            <li>Dados públicos nacionais e internacionais (IBGE, Bacen, FAO, Comtrade, USDA)</li>
+            <li>Leitura setorial e macroeconômica</li>
+          </ul>
         </div>
-
-        <!-- Imagem de capa -->
-        <div class="col-lg-5">
-          <figure class="m-0 bg-white border rounded-4 shadow-sm overflow-hidden">
-            <img src="imagens/cod_report.png" 
-                 alt="Capa do Relatório do Mercado de Bacalhau" 
-                 class="img-fluid">
-          </figure>
-          <figcaption class="small text-muted mt-2">
-            Relatório completo disponível no botão à esquerda.
-          </figcaption>
+        <div class="card">
+          <h3>Monitoramento do varejo</h3>
+          <ul class="list">
+            <li>Produtos, preços e promoções pelo Brasil</li>
+            <li>Análises por clusters baseados em redes, categorias e regiões</li>
+          </ul>
         </div>
-
+        <div class="card">
+          <h3>Pesquisa com tomadores de decisão</h3>
+          <ul class="list">
+            <li>Entrevistas qualitativas e análise de discurso</li>
+            <li>Percepções, tendências e posicionamento competitivo</li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
 
 
 
 
+      <h3 class="section-title" style="margin-top:22px">Ferramentas de Inteligência</h3>
+      <div class="intel-grid">
+        <!-- Card 1: Dashboard -->
+        <article class="intel-card">
+          <img class="intel-thumb intel-thumb--contain" src="imagens/tela_dashboard_comex.png" alt="Painel do Varejo / Comex">
+          <div class="intel-body">
+            <h4>Dashboard Interativo</h4>
+            <p>Diversos modelos com visualização dinâmica, atualizações rápidas e filtros práticos.</p>
+            <div class="btn-row">
+              <a class="btn-sm btn-primary" href="https://jubart-dashboard.fly.dev/overview" target="_blank" rel="noopener noreferrer">
+                Abrir demo
+              </a>
+              <a class="btn-sm btn-ghost" href="#contato">Quero para minha categoria</a>
+            </div>
 
-
-
-<!-- Dashboards em destaque -->
-<section id="dashboards" style="max-width:1100px;margin:0 auto;padding: 2rem 1rem 3rem;">
-  <h2 class="text-center mb-4">Dashboards em destaque</h2>
-  <p class="text-center mx-auto mb-5" style="max-width:760px;">
-    Acompanhe indicadores do comércio exterior de pescado e das importações americanas de tilápia.
-  </p>
-
-  <div class="row g-4">
-
-    <!-- Card: Comércio Exterior (FastAPI) -->
-    <div class="col-md-6">
-      <a href="https://jubart-dashboard.fly.dev" target="_blank" rel="noopener" class="text-decoration-none text-dark">
-        <article class="bg-white border rounded-4 shadow-sm overflow-hidden h-100">
-          <div class="p-3">
-            <h3 class="h5 mb-1">Comércio Exterior de Pescado</h3>
-            <p class="mb-3">Visualização interativa conectada ao banco de dados, com filtros e gráficos.</p>
-          </div>
-          <img src="imagens/tela_dashboard_comex.png" alt="Dashboard FastAPI de comércio exterior de pescado" class="img-fluid">
-          <div class="p-3">
-            <span class="btn btn-outline-primary btn-sm">Acessar o dashboard</span>
           </div>
         </article>
-      </a>
-    </div>
 
-    <!-- Card: Tilápia EUA -->
-    <div class="col-md-6">
-      <a href="outputs/painel_tilapia_us/painel_tilapia_us.html" target="_blank" rel="noopener" class="text-decoration-none text-dark">
-        <article class="bg-white border rounded-4 shadow-sm overflow-hidden h-100">
-          <div class="p-3">
-            <h3 class="h5 mb-1">Importações Americanas de Tilápia</h3>
-            <p class="mb-3">Indicadores e visualizações das importações dos EUA, com atualização contínua e foco em tendências.</p>
-          </div>
-          <img src="imagens/tela_painel_tilapia_US.png" alt="Painel de importações americanas de tilápia" class="img-fluid">
-          <div class="p-3">
-            <span class="btn btn-outline-primary btn-sm">Acessar o painel</span>
+        <!-- Card 2: Relatório de Bacalhau -->
+        <article class="intel-card">
+          <img class="intel-thumb" src="imagens/cod_report.png" alt="Brazilian Cod Fish Market Report">
+          <div class="intel-body">
+            <h4>Modelo Básico de Relatório</h4>
+            <p>Leitura do varejo: preços, dispersão regional, clusters de lojas e efetividade de promoções.</p>
+            <div class="btn-row">
+                <a class="btn-sm btn-primary" href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf">Baixar PDF</a>
+                <a class="btn-sm btn-ghost" href="#contato">Solicitar versão sob medida</a>
+            </div>
           </div>
         </article>
-      </a>
+      </div>
+    </section>
+
+    <section class="section container" id="diferenciais">
+      <h2 class="section-title">Nossos diferenciais</h2>
+      <div class="grid g-2">
+        <div class="card"><strong>Velocidade</strong><br><span class="muted">Dados coletados e tabulados em horas, não em semanas.</span></div>
+        <div class="card"><strong>Métodos robustos</strong><br><span class="muted">Integração de múltiplas fontes públicas em uma única base.</span></div>
+        <div class="card"><strong>Expertise no Brasil</strong><br><span class="muted">Dinâmica do varejo, consumo e competitividade local.</span></div>
+        <div class="card"><strong>Insights acionáveis</strong><br><span class="muted">Recomendações para preço, sortimento e promoção.</span></div>
+      </div>
+    </section>
+
+    <section class="section container" id="resultados">
+      <h2 class="section-title">Resultados que entregamos</h2>
+
+      <ul class="outcomes">
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">▲</span>
+          <div class="txt">
+            <strong>Aumento de margens</strong>
+            <small>Definição precisa de preços e promoções</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">▲</span>
+          <div class="txt">
+            <strong>Expansão de mercado</strong>
+            <small>Regiões e redes com maior potencial</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">◆</span>
+          <div class="txt">
+            <strong>Valorização da marca</strong>
+            <small>Evidências de posicionamento</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">●</span>
+          <div class="txt">
+            <strong>Otimização de ROI</strong>
+            <small>Menor desperdício de verbas comerciais</small>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section container" id="sobre">
+      <div class="grid g-2">
+        
+        <!-- Coluna 1: Quem somos + Fale com a gente -->
+        <div class="card">
+          <h2 class="section-title">Quem somos</h2>
+          <p>
+            A JubartData é uma consultoria brasileira especializada em inteligência de mercado, monitoramento de varejo e análise setorial,
+            com mais de 20 anos de experiência em alimentos e pescados e histórico de projetos para multinacionais e associações.
+          </p>
+
+          <hr style="margin:20px 0; border:0; border-top:1px solid #e5e7eb" />
+
+          <h2 class="section-title">Fale com a gente</h2>
+          <ul class="list">
+            <li>Email: <a href="mailto:contato@jubartdata.com.br">contato@jubartdata.com.br</a></li>
+            <li>WhatsApp: 
+              <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">
+                +55 (61) 9 9355-3849
+              </a>
+            </li>
+            <li>LinkedIn: 
+              <a href="https://www.linkedin.com/in/francisco-abra%C3%A3o-oliveira-19a62954/" target="_blank" rel="noopener noreferrer">
+                JubartData
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Coluna 2: Clientes e Parceiros -->
+        <div class="card">
+          <h2 class="section-title">Clientes e Parceiros</h2>
+          <p>Atuamos com entidades do setor produtivo, associações, projetos públicos e empresas privadas. Entre os públicos que já atendemos:</p>
+          <ul>
+            <li>Associações do agronegócio e setor de pescados</li>
+            <li>Empresas de consultoria e inteligência de mercado</li>
+            <li>Instituições públicas interessadas em diagnósticos econômicos</li>
+            <li>Distribuidores, importadores e profissionais da cadeia alimentar</li>
+          </ul>
+          <p class="mt-3"><em>Deseja se tornar um parceiro da Jubart? Estamos prontos para ouvir sua demanda.</em></p>
+        </div>
+        
+      </div>
+    </section>
+
+
+
+
+  </main>
+
+  <!-- ====================== CONTENT EN ====================== -->
+  <main lang="en">
+    <section class="section container" id="what-we-do">
+      <h2 class="section-title">What we do</h2>
+      <p class="highlight-intro">
+        Strategic reports that support positioning, expansion and competitiveness decisions in Brazil —
+        combining market context, retail monitoring and stakeholder research.
+      </p>
+
+      <div class="grid g-3">
+        <div class="card">
+          <h3>Market context</h3>
+          <ul class="list">
+            <li>National and international public data (IBGE, Central Bank, FAO, Comtrade, USDA)</li>
+            <li>Sectoral and macroeconomic analysis</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Retail monitoring</h3>
+          <ul class="list">
+            <li>Products, prices and promotions across Brazil</li>
+            <li>Cluster analysis by chains, categories and regions</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Decision-maker research</h3>
+          <ul class="list">
+            <li>Qualitative interviews and discourse analysis</li>
+            <li>Perceptions, trends and competitive positioning</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="section-title" style="margin-top:22px">Intelligence Tools</h3>
+      <div class="intel-grid">
+        <!-- Card 1: Dashboard -->
+        <article class="intel-card">
+          <img class="intel-thumb intel-thumb--contain" src="imagens/tela_dashboard_comex.png" alt="Retail / Trade Dashboard">
+          <div class="intel-body">
+            <h4>Interactive Dashboard</h4>
+            <p>Multiple models with dynamic visualization, fast updates and practical filters.</p>
+            <div class="btn-row">
+              <a class="btn-sm btn-primary" href="https://jubart-dashboard.fly.dev/overview" target="_blank" rel="noopener noreferrer">
+                Open demo
+              </a>
+              <a class="btn-sm btn-ghost" href="#contact">Request for my category</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Codfish Report -->
+        <article class="intel-card">
+          <img class="intel-thumb" src="imagens/cod_report.png" alt="Brazilian Cod Fish Market Report">
+          <div class="intel-body">
+            <h4>Basic Report Model</h4>
+            <p>Retail insights: prices, regional dispersion, store clusters and promotion effectiveness.</p>
+            <div class="btn-row">
+                <a class="btn-sm btn-primary" href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf">Download PDF</a>
+                <a class="btn-sm btn-ghost" href="#contact">Request a tailored version</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="differentials">
+      <h2 class="section-title">Our Differentials</h2>
+      <div class="grid g-2">
+        <div class="card"><strong>Speed</strong><br><span class="muted">Data collected and tabulated in hours, not weeks.</span></div>
+        <div class="card"><strong>Robust methods</strong><br><span class="muted">Integration of multiple public sources into a single database.</span></div>
+        <div class="card"><strong>Brazil expertise</strong><br><span class="muted">Understanding retail, consumption and local competitiveness.</span></div>
+        <div class="card"><strong>Actionable insights</strong><br><span class="muted">Recommendations for pricing, assortment and promotions.</span></div>
+      </div>
+    </section>
+
+    <section class="section container" id="results">
+      <h2 class="section-title">Results we deliver</h2>
+
+      <ul class="outcomes">
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">▲</span>
+          <div class="txt">
+            <strong>Higher margins</strong>
+            <small>Precise definition of prices and promotions</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">▲</span>
+          <div class="txt">
+            <strong>Market expansion</strong>
+            <small>Regions and retail chains with greater potential</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">◆</span>
+          <div class="txt">
+            <strong>Brand value growth</strong>
+            <small>Evidence-based positioning</small>
+          </div>
+        </li>
+
+        <li class="outcome">
+          <span class="ico" aria-hidden="true">●</span>
+          <div class="txt">
+            <strong>ROI optimization</strong>
+            <small>Less waste of commercial budgets</small>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+
+    <section class="section container" id="about">
+      <div class="grid g-2">
+        
+        <!-- Column 1: About us + Contact -->
+        <div class="card">
+          <h2 class="section-title">About us</h2>
+          <p>
+            JubartData is a Brazilian consultancy specialized in market intelligence, retail monitoring and sectoral analysis,
+            with over 20 years of experience in food and seafood and a track record of projects for multinationals and associations.
+          </p>
+
+          <hr style="margin:20px 0; border:0; border-top:1px solid #e5e7eb" />
+
+          <h2 class="section-title">Contact us</h2>
+          <ul class="list">
+            <li>Email: <a href="mailto:contato@jubartdata.com.br">contato@jubartdata.com.br</a></li>
+            <li>WhatsApp: 
+              <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">
+                +55 (61) 9 9355-3849
+              </a>
+            </li>
+            <li>LinkedIn: 
+              <a href="https://www.linkedin.com/in/francisco-abra%C3%A3o-oliveira-19a62954/" target="_blank" rel="noopener noreferrer">
+                JubartData
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Column 2: Clients and Partners -->
+        <div class="card">
+          <h2 class="section-title">Clients and Partners</h2>
+          <p>We work with entities in the productive sector, associations, public projects and private companies. Among the audiences we have served:</p>
+          <ul>
+            <li>Agribusiness and seafood associations</li>
+            <li>Consulting and market intelligence firms</li>
+            <li>Public institutions interested in economic diagnostics</li>
+            <li>Distributors, importers and professionals in the food supply chain</li>
+          </ul>
+          <p class="mt-3"><em>Want to become a Jubart partner? We are ready to hear your needs.</em></p>
+        </div>
+        
+      </div>
+    </section>
+
+
+
+
+
+
+
+  </main>
+
+
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="imagens/logo_escura.png" alt="JubartData" style="height:26px"/>
+        <span>JubartData — From Brazil to the World</span>
+      </div>
+      <div style="color:#94a3b8">© <span id="y"></span> JubartData. All rights reserved.</div>
     </div>
+  </footer>
 
-  </div>
-</section>
+  <script>
+    // Ano do rodapé
+    const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-4 mt-5">
-  <div class="container">
-    <p class="mb-0">&copy; 2025 JubartData. Todos os direitos reservados.</p>
-  </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    // Toggle de idioma
+    function setLang(lang){
+      document.querySelectorAll('body [lang]').forEach(el=>{
+        el.classList.toggle('active', el.getAttribute('lang')===lang);
+      });
+      document.getElementById('pt').classList.toggle('active', lang==='pt');
+      document.getElementById('en').classList.toggle('active', lang==='en');
+      localStorage.setItem('jubart_lang', lang);
+      if(history.replaceState){ history.replaceState(null,'','#'+lang); } else { location.hash='#'+lang; }
+      document.documentElement.lang = (lang==='en' ? 'en' : 'pt-br');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    document.getElementById('pt').addEventListener('click', ()=> setLang('pt'));
+    document.getElementById('en').addEventListener('click', ()=> setLang('en'));
+    const initial = (location.hash.replace('#','') || localStorage.getItem('jubart_lang') || 'pt');
+    setLang(initial==='en' ? 'en' : 'pt');
+  </script>
 </body>
 </html>
