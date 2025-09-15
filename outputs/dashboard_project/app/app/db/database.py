@@ -1,0 +1,303 @@
+import os
+import pandas as pd
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+
+
+# --- NOVO: carregar .env de forma robusta ---
+_env_path = find_dotenv()
+if not _env_path:
+    _env_path = Path(__file__).resolve().parents[2] / ".env"
+if Path(_env_path).exists():
+    load_dotenv(_env_path)
+else:
+    load_dotenv()
+# --------------------------------------------
+
+
+def _get_db_url() -> str:
+    url = os.getenv("DATABASE_URL")
+    if url:
+        # Fly/Heroku costumam fornecer postgres:// ; normalize p/ SQLAlchemy 2.x
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql+psycopg2://", 1)
+        return url
+    # Fallback só p/ dev local sem env; em produção queremos Postgres
+    return "sqlite:///./local.db"
+
+DATABASE_URL = _get_db_url()
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+#engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args=connect_args,
+    future=True
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=True,  # <- importante p/ não “congelar” dados
+    bind=engine
+)
+
+
+def get_ano_mes_max(nome_tabela: str) -> tuple[int, int] | tuple[None, None]:
+    """
+    Retorna:
+    - o ano mais recente (`ano_atual`)
+    - o mês mais recente (`mes_max`) dentro do ano mais recente
+
+    Caso não existam dados, retorna (None, None)
+    """
+    with engine.connect() as connection:
+        # Ano mais recente
+        ano_result = connection.execute(
+            text(f"SELECT MAX(ano) FROM {nome_tabela}")
+        ).fetchone()
+        ano_atual = ano_result[0]
+
+        if ano_atual is None:
+            return None, None
+
+        # Mês mais recente dentro do ano mais recente
+        mes_result = connection.execute(
+            text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano = :ano"),
+            {"ano": ano_atual}
+        ).fetchone()
+        mes_max = mes_result[0]
+
+        if mes_max is None:
+            return None, None
+
+    return ano_atual, mes_max
+
+
+def get_dados_volume_preco(engine, tipo_dado: str, ano_final: int, mes_limite: int | None = None) -> pd.DataFrame:
+    ano_min = ano_final - 5
+    nome_tabela = f"pescados_dados_{tipo_dado}"
+
+    with engine.connect() as connection:
+        if mes_limite is None:
+            # mês limite do próprio ano_final
+            mes_result = connection.execute(
+                text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano = :ano"),
+                {"ano": ano_final}
+            ).fetchone()
+            mes_limite = mes_result[0] if mes_result and mes_result[0] is not None else 12
+
+        query = text(f"""
+            SELECT
+                ano,
+                SUM(CASE WHEN mes <= :mes_limite THEN kg    ELSE 0 END) AS volume_mes_corrente,
+                SUM(CASE WHEN mes <= :mes_limite THEN valor ELSE 0 END) AS valor_mes_corrente
+            FROM {nome_tabela}
+            WHERE ano BETWEEN :ano_min AND :ano_max
+            GROUP BY ano
+            ORDER BY ano
+        """)
+
+        df = pd.read_sql_query(query, con=connection, params={
+            "mes_limite": mes_limite,
+            "ano_min": ano_min,
+            "ano_max": ano_final
+        })
+
+    df["preco_medio"] = df.apply(
+        lambda r: (r["valor_mes_corrente"] / r["volume_mes_corrente"]) if r["volume_mes_corrente"] else None,
+        axis=1
+    )
+    return df
+
+
+# app/db/database.py (ou onde estiver a função)
+def get_dados_evolucao_mensal(
+    engine,
+    tipo_dado: str,
+    ano_final: int,
+    #mes_limite: int | None = None,   # mantido só p/ compatibilidade
+) -> pd.DataFrame:
+
+    ano_min = ano_final - 5
+    nome_tabela = f"pescados_dados_{tipo_dado}"
+
+    with engine.connect() as connection:
+        # Sem aplicar limite: anos anteriores vão até dez/dezembro,
+        # e o ano_final vai até o último mês existente na tabela.
+        query = text(f"""
+            SELECT ano, mes, SUM(kg) AS total_volume
+            FROM {nome_tabela}
+            WHERE ano BETWEEN :ano_min AND :ano_final
+            GROUP BY ano, mes
+            ORDER BY ano, mes
+        """)
+
+        df = pd.read_sql_query(
+            query,
+            con=connection,
+            params={"ano_min": ano_min, "ano_final": ano_final},
+        )
+
+    return df
+
+
+def get_kpis_resumo(engine, tipo: str, ano_final: int, mes_limite: int | None = None) -> dict:
+    nome_tabela = f"pescados_dados_{tipo}"
+
+    with engine.connect() as conn:
+        if mes_limite is None:
+            mes_limite = conn.execute(
+                text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano=:ano"),
+                {"ano": ano_final}
+            ).scalar() or 12
+
+        ano_ant = ano_final - 1
+
+        row_atual = conn.execute(text(f"""
+            SELECT COALESCE(SUM(kg),0) AS vol, COALESCE(SUM(valor),0) AS val
+            FROM {nome_tabela}
+            WHERE ano=:ano AND mes<=:m
+        """), {"ano": ano_final, "m": mes_limite}).fetchone()
+
+        row_ant = conn.execute(text(f"""
+            SELECT COALESCE(SUM(kg),0) AS vol, COALESCE(SUM(valor),0) AS val
+            FROM {nome_tabela}
+            WHERE ano=:ano AND mes<=:m
+        """), {"ano": ano_ant, "m": mes_limite}).fetchone()
+
+    vol_atual   = float(row_atual.vol or 0)
+    valor_atual = float(row_atual.val or 0)
+    vol_ant     = float(row_ant.vol   or 0)
+    valor_ant   = float(row_ant.val   or 0)
+
+    preco_atual = (valor_atual / vol_atual) if vol_atual else None
+    preco_ant   = (valor_ant   / vol_ant)   if vol_ant   else None
+
+    def delta_rel(atual, anterior):
+        if anterior and anterior != 0:
+            return (atual - anterior) / anterior
+        return None
+
+    volume_ton_atual = vol_atual / 1_000.0
+    volume_ton_ant   = vol_ant   / 1_000.0
+    valor_musd_atual = valor_atual / 1_000_000.0
+    valor_musd_ant   = valor_ant   / 1_000_000.0
+    preco_ton_atual  = (preco_atual * 1_000.0) if preco_atual is not None else None
+    preco_ton_ant    = (preco_ant   * 1_000.0) if preco_ant   is not None else None
+
+    return {
+        "kpi_volume":       volume_ton_atual,
+        "kpi_valor":        valor_musd_atual,
+        "kpi_preco":        preco_ton_atual,
+        "kpi_volume_ant":   volume_ton_ant,
+        "kpi_valor_ant":    valor_musd_ant,
+        "kpi_preco_ant":    preco_ton_ant,
+        "kpi_volume_delta": delta_rel(volume_ton_atual, volume_ton_ant),
+        "kpi_valor_delta":  delta_rel(valor_musd_atual, valor_musd_ant),
+        "kpi_preco_delta":  delta_rel(preco_ton_atual,  preco_ton_ant),
+        "mes_max":          mes_limite,
+        "ano_anterior":     ano_ant,
+    }
+
+
+def get_kpis(tipo_dado: str, ano_final: int) -> dict:
+    """
+    KPIs do topo
+
+    Retorna:
+      - volume_atual (kg)
+      - volume_atual_ton (toneladas)   <-- novo
+      - valor_atual (USD)
+      - preco_atual (USD/kg)
+      - delta_volume (% vs ano anterior, até o mesmo mes_max)
+      - delta_valor  (%)
+      - delta_preco  (%)
+      - mes_max (int)
+    """
+    nome_tabela = f"pescados_dados_{tipo_dado}"
+
+    with engine.connect() as conn:
+        # último mês disponível no ano selecionado
+        mes_max_row = conn.execute(
+            text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano = :ano"),
+            {"ano": ano_final}
+        ).fetchone()
+        mes_max = mes_max_row[0] if mes_max_row and mes_max_row[0] is not None else 12
+
+        # agrega ano atual e anterior, cortando até mes_max
+        q = text(f"""
+            SELECT
+                SUM(CASE WHEN ano = :ano     AND mes <= :m THEN kg    END) AS vol_atual,
+                SUM(CASE WHEN ano = :ano     AND mes <= :m THEN valor END) AS val_atual,
+                SUM(CASE WHEN ano = :ano_ant AND mes <= :m THEN kg    END) AS vol_ant,
+                SUM(CASE WHEN ano = :ano_ant AND mes <= :m THEN valor END) AS val_ant
+            FROM {nome_tabela}
+        """)
+        r = conn.execute(q, {"ano": ano_final, "ano_ant": ano_final - 1, "m": mes_max}).mappings().one()
+
+    vol_atual = r["vol_atual"] or 0
+    val_atual = r["val_atual"] or 0
+    vol_ant   = r["vol_ant"]   or 0
+    val_ant   = r["val_ant"]   or 0
+
+    preco_atual = (val_atual / vol_atual) if vol_atual else None
+    preco_ant   = (val_ant   / vol_ant)   if vol_ant   else None
+
+    def pct(now, prev):
+        if not prev:
+            return None
+        return (now - prev) / prev
+
+    return {
+        "volume_atual":      vol_atual,             # kg (compat)
+        "volume_atual_ton":  vol_atual / 1000.0,    # toneladas (novo)
+        "valor_atual":       val_atual,             # USD
+        "preco_atual":       preco_atual,           # USD/kg
+        "delta_volume":      pct(vol_atual, vol_ant),
+        "delta_valor":       pct(val_atual, val_ant),
+        "delta_preco":       pct(preco_atual, preco_ant) if (preco_atual and preco_ant) else None,
+        "mes_max":           mes_max,
+    }
+
+
+
+def get_distribuicao_volume(engine, tipo_dado: str, ano_final: int, filtro: str, mes_limite: int | None = None) -> pd.DataFrame:
+    nome_tabela = f"pescados_dados_{tipo_dado}"
+
+    COLMAP = {
+        "paises": "paises",
+        "uf": "uf",
+        "ncm": "ncm",
+        "especie": "especie",
+        "categoria": "categoria",
+    }
+    if filtro not in COLMAP:
+        raise ValueError("Filtro inválido.")
+    col = COLMAP[filtro]
+
+    with engine.connect() as conn:
+        if mes_limite is None:
+            mes_limite = conn.execute(
+                text(f"SELECT MAX(mes) FROM {nome_tabela} WHERE ano=:ano"),
+                {"ano": ano_final}
+            ).scalar() or 12
+
+        q = text(f"""
+            SELECT {col} AS chave, SUM(kg) AS volume_total
+            FROM {nome_tabela}
+            WHERE ano = :ano AND mes <= :m
+            GROUP BY {col}
+            ORDER BY volume_total DESC
+            LIMIT 100
+        """)
+        df = pd.read_sql_query(q, con=conn, params={"ano": ano_final, "m": mes_limite})
+
+    if "chave" in df.columns:
+        df["chave"] = df["chave"].fillna("Não informado")
+
+    return df
+
