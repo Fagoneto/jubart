@@ -9,8 +9,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
-from app.routes import overview, market, pages
-from app.db.database import engine
+# from app.routes import overview, market, pages
+# from app.db.database import engine
+
+from routes import overview, market, pages
+from db.database import engine
 
 # ---- Build tag para verificarmos a versão em produção
 BUILD_TAG = os.getenv("BUILD_TAG", datetime.utcnow().strftime("dev-%Y%m%d-%H%M"))
