@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-5P5K4D5R');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Relatório — JubartData</title>
+  <meta name="description" content="Acesse a edição mais recente do Observatório Nacional de Preços do Pescado (JubartData) e acompanhe os principais movimentos do varejo no Brasil." />
+  <link rel="icon" href="imagens/cauda_jubart.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Relatório — JubartData" />
+  <meta property="og:description" content="Edição mais recente do Observatório Nacional de Preços do Pescado (JubartData)." />
+  <meta property="og:image" content="https://jubartdata.com.br/imagens/cauda_jubart_1200x630.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://jubartdata.com.br/relatorio.html" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg:#1f2426; --ink:#0b5563; --brand:#f2b705;
+      --card:#ffffff; --muted:#6b7280; --light:#eef2f5; --ink-2:#0f1315;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;
+      color:#0e141b; background:var(--light);
+    }
+    a{color:var(--ink);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* NAV */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:#0f1315; border-bottom:1px solid #0b1a20;
+    }
+    .nav .wrap{
+      display:flex; justify-content:space-between; align-items:center; gap:16px;
+      padding:10px 24px; max-width:1100px; margin:auto;
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{height:28px}
+    .brand span{color:#f9fafb; font-weight:800; letter-spacing:.4px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      color:#e2e8f0; font-weight:700; font-size:13px;
+      transition:transform .15s ease, background .15s ease, border-color .15s ease;
+      cursor:pointer;
+    }
+    .pill:hover{transform:translateY(-1px); border-color:#475569; background:rgba(255,255,255,.10)}
+    .pill:active{transform:translateY(0px)}
+    .container{max-width:1100px;margin:auto;padding:24px}
+
+    /* HERO */
+    .hero{
+      color:#fff;
+      background:linear-gradient(180deg,#0f1315 0%, #1f2426 85%);
+      padding:46px 0 34px;
+      overflow:hidden;
+    }
+    .hero .wrap{
+      max-width:1100px; margin:auto; padding:0 24px;
+      display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);
+      gap:28px; align-items:center;
+    }
+    .h1{font-size:clamp(30px,4.6vw,44px); line-height:1.12; margin:0 0 10px}
+    .lead{font-size:clamp(15px,2vw,18px); color:#d6dee3; margin:0}
+    .hero-art{
+      position:relative; height:260px;
+      border-radius:18px; border:1px solid rgba(255,255,255,.10);
+      background:radial-gradient(80% 90% at 30% 20%, rgba(242,183,5,.22), transparent 60%),
+                 radial-gradient(90% 80% at 70% 75%, rgba(11,85,99,.35), transparent 55%),
+                 rgba(255,255,255,.04);
+      overflow:hidden;
+    }
+    .bubble{
+      position:absolute; border-radius:999px; filter:blur(.2px);
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      animation:float 7s ease-in-out infinite;
+    }
+    .b1{width:140px;height:140px; left:18px; top:18px; animation-delay:0s}
+    .b2{width:90px;height:90px; right:22px; top:30px; animation-delay:1.2s}
+    .b3{width:120px;height:120px; right:38px; bottom:18px; animation-delay:2.1s}
+    .b4{width:70px;height:70px; left:46px; bottom:26px; animation-delay:1.7s}
+    @keyframes float{
+      0%,100%{transform:translateY(0px)}
+      50%{transform:translateY(-10px)}
+    }
+    .hero-card{
+      position:absolute; left:18px; right:18px; bottom:18px;
+      padding:14px 14px;
+      border-radius:14px;
+      background:rgba(15,19,21,.62);
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      box-shadow:0 14px 28px rgba(0,0,0,.25);
+    }
+    .hero-card .kicker{
+      display:inline-block;
+      font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+      color:rgba(242,183,5,.95); font-weight:800;
+      margin-bottom:6px;
+    }
+    .hero-card .meta{
+      display:flex; gap:10px; flex-wrap:wrap; margin:0;
+      color:#e2e8f0; font-weight:700; font-size:13px;
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--brand);display:inline-block;margin-top:5px}
+
+    /* CONTENT */
+    .section{padding:22px 0}
+    .section-title{font-size:22px; margin:0 0 8px; position:relative}
+    .section-title::after{content:""; display:block; width:64px; height:4px; background:var(--brand); border-radius:2px; margin-top:6px}
+    .muted{color:var(--muted); font-size:14px; line-height:1.55}
+    .grid{display:grid; gap:18px}
+    .g-2{grid-template-columns:repeat(2,1fr)}
+    .card{background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:20px}
+    @media (max-width:900px){ .g-2{grid-template-columns:1fr} .hero .wrap{grid-template-columns:1fr} .hero-art{display:none} }
+
+    /* REPORT CARD */
+    .report{
+      display:grid; grid-template-columns:1fr 1.05fr; gap:18px; align-items:center;
+    }
+    .report img{
+      width:100%; max-height:280px; height:auto; object-fit:contain;
+      border-radius:14px; border:1px solid #e5e7eb; background:#fff; padding:10px;
+    }
+    .report .eyebrow{
+      font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+      color:#b88600; margin-bottom:6px;
+    }
+    .report h2{margin:0 0 8px; font-size:24px; line-height:1.25}
+    .btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .btn{
+      padding:12px 16px; border-radius:12px; border:2px solid transparent;
+      font-weight:800; font-size:14px; cursor:pointer;
+      display:inline-flex; align-items:center; gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(16,24,40,.10)}
+    .btn:active{transform:translateY(0px)}
+    .btn-primary{background:var(--brand); color:#0b1a20; border-color:var(--brand)}
+    .btn-ghost{background:#fff; border-color:#e5e7eb; color:#0f172a}
+    .icon{width:18px;height:18px; display:inline-block}
+
+    /* MINI LIST */
+    .editions{margin:0; padding:0; list-style:none; display:grid; gap:10px}
+    .edition{
+      display:flex; justify-content:space-between; align-items:center; gap:14px;
+      padding:12px 14px; border-radius:14px;
+      border:1px solid #e5e7eb; background:#fff;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .edition:hover{transform:translateY(-1px); box-shadow:0 10px 20px rgba(16,24,40,.08); border-color:#d7dde3}
+    .edition strong{display:block}
+    .edition small{color:#64748b}
+    .edition .actions{display:flex; gap:8px; flex-wrap:wrap}
+    .btn-mini{
+      padding:8px 10px; border-radius:10px; border:1px solid #e5e7eb;
+      background:#fff; font-weight:800; font-size:12px; color:#0f172a; cursor:pointer;
+    }
+    .btn-mini.primary{background:rgba(242,183,5,.18); border-color:rgba(242,183,5,.45)}
+    .btn-mini:hover{border-color:#cbd5e1}
+
+    /* FOOTER */
+    .footer{padding:32px 0; color:#cbd5e1; background:#0f1315; border-top:1px solid #0b1a20}
+  </style>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5P5K4D5R"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="/#pt" aria-label="Voltar para o site">
+        <img src="imagens/logo_escura.png" alt="JubartData" />
+        <span>JubartData</span>
+      </a>
+
+      <a class="pill" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer"
+         id="cta_whatsapp_top"
+         data-track="whatsapp_top">
+        <span class="dot" aria-hidden="true"></span> Falar com a Jubart
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <h1 class="h1">Relatório semanal (página oficial)</h1>
+        <p class="lead">
+          Use esta página como link único em e-mails, WhatsApp, LinkedIn e campanhas.
+          Assim você contabiliza <strong>cliques na página</strong> e <strong>cliques no PDF</strong> no GA4/Google Ads.
+        </p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <span class="bubble b1"></span>
+        <span class="bubble b2"></span>
+        <span class="bubble b3"></span>
+        <span class="bubble b4"></span>
+        <div class="hero-card">
+          <div class="kicker">Medição pronta para campanha</div>
+          <p class="meta" style="margin:0">
+            • page_view do /relatorio.html<br/>
+            • evento “report_open” no clique do botão<br/>
+            • UTM (source/medium/campaign) automaticamente lido
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2 class="section-title">Edição em destaque</h2>
+
+      <div class="card report">
+        <div>
+          <div class="eyebrow">Observatório Nacional de Preços do Pescado</div>
+          <h2 id="reportTitle">Última edição</h2>
+          <p class="muted" id="reportDesc">
+            Clique em <strong>Abrir relatório</strong> para registrar o evento de acesso ao PDF.
+            Se você divulgar este link com UTM (ex: <code>?utm_source=linkedin&utm_medium=social&utm_campaign=relatorio_semanal</code>),
+            o GA4 vai atribuir origem/campanha automaticamente.
+          </p>
+
+          <div class="btn-row">
+            <a class="btn btn-primary" id="btnOpenReport" href="#" target="_blank" rel="noopener noreferrer"
+               data-track="report_open">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-8-6Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M14 3v6h8" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              Abrir relatório (PDF)
+            </a>
+
+            
+          </div>
+
+          <p class="muted" style="margin-top:10px">
+            <strong>Dica:</strong> se quiser “fixar” a edição do PDF por campanha, use o parâmetro <code>?pdf=</code>.
+            Exemplo: <code>/relatorio.html?pdf=/publicacoes/Relatorio%20semanal%20JubartData.pdf</code>
+          </p>
+        </div>
+
+        <div>
+          <img src="imagens/imagem_relatorio_semanal.png" alt="Capa do Relatório Semanal JubartData" />
+        </div>
+      </div>
+    </section>
+
+    
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="imagens/logo_escura.png" alt="JubartData" style="height:26px"/>
+        <span>JubartData — From Brazil to the World</span>
+      </div>
+      <div style="color:#94a3b8">© <span id="y"></span> JubartData. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Ano do rodapé
+    const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
+
+    // ========= Config =========
+    // PDF default (pode ser substituído por ?pdf=/publicacoes/arquivo.pdf)
+    const DEFAULT_PDF = "/publicacoes/Relatorio-semanal-JubartData.pdf";
+    
+    // ========= Helpers =========
+    function getParam(name){
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    function pushEvent(eventName, params){
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
+    }
+
+    // Captura UTM para anexar no evento (sem depender de configuração adicional)
+    function readUtm(){
+      const u = new URL(window.location.href);
+      const keys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
+      const out = {};
+      keys.forEach(k => {
+        const v = u.searchParams.get(k);
+        if (v) out[k] = v;
+      });
+      return out;
+    }
+
+    // ========= Bind PDF link =========
+    const reportPdf = getParam("pdf") || DEFAULT_PDF;
+    const btnOpen = document.getElementById("btnOpenReport");
+    btnOpen.href = reportPdf;
+
+    // Eventos de clique (GTM/GA4)
+    const utm = readUtm();
+
+    btnOpen.addEventListener("click", function(){
+      pushEvent("report_open", Object.assign({
+        link_url: reportPdf,
+        link_text: "Abrir relatório (PDF)"
+      }, utm));
+      // Observação: o clique abre em nova aba (target=_blank),
+      // então não precisamos segurar navegação.
+    });
+
+
+
+    // WhatsApp
+    ["cta_whatsapp_top", "cta_whatsapp_mid"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("click", function(){
+        pushEvent("whatsapp_click", Object.assign({
+          link_url: el.href,
+          placement: id
+        }, utm));
+      });
+    });
+
+    // ========= Render editions =========
+    const list = document.getElementById("editionsList");
+    if (list && EDITIONS.length){
+      EDITIONS.forEach((it, idx) => {
+        const li = document.createElement("li");
+        li.className = "edition";
+        li.innerHTML = `
+          <div>
+            <strong>${it.title}</strong>
+            <small>${it.pdf}</small>
+          </div>
+          <div class="actions">
+            <a class="btn-mini primary" href="${it.pdf}" target="_blank" rel="noopener noreferrer" data-edition="${idx}">
+              Abrir PDF
+            </a>
+          </div>
+        `;
+        li.querySelector("a").addEventListener("click", function(){
+          pushEvent("report_open", Object.assign({
+            link_url: it.pdf,
+            link_text: it.title,
+            edition_index: idx
+          }, utm));
+        });
+        list.appendChild(li);
+      });
+    } else if (list){
+      list.innerHTML = `
+        <li class="muted" style="padding:10px 0">
+          (sem lista configurada) — se quiser, preencha o array <code>EDITIONS</code> no final do arquivo.
+        </li>
+      `;
+    }
+
+    // ========= Optional: scroll depth (útil p/ GA4) =========
+    let maxScroll = 0;
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop || document.body.scrollTop);
+      const height = (h.scrollHeight - h.clientHeight);
+      const pct = height > 0 ? Math.round((scrolled / height) * 100) : 0;
+      if (pct >= 25 && maxScroll < 25){ maxScroll = 25; pushEvent("scroll_25", utm); }
+      if (pct >= 50 && maxScroll < 50){ maxScroll = 50; pushEvent("scroll_50", utm); }
+      if (pct >= 75 && maxScroll < 75){ maxScroll = 75; pushEvent("scroll_75", utm); }
+      if (pct >= 90 && maxScroll < 90){ maxScroll = 90; pushEvent("scroll_90", utm); }
+    }, { passive:true });
+  </script>
+</body>
+</html>
