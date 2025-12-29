@@ -339,13 +339,8 @@
               id="btnOpenReport"
               href="/publicacoes/Relatorio-semanal-JubartData.pdf"
               target="_blank"
-              rel="noopener noreferrer"
-              onclick="window.dataLayer = window.dataLayer || []; window.dataLayer.push({
-                event: 'report_open',
-                link_url: this.href,
-                link_text: 'open_report_button'
-              });"
-            >
+              rel="noopener noreferrer">
+
               <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-8-6Z" stroke="currentColor" stroke-width="2"/>
                 <path d="M14 3v6h8" stroke="currentColor" stroke-width="2"/>
@@ -510,5 +505,8 @@
       if (pct >= 90 && maxScroll < 90){ maxScroll = 90; pushEvent("scroll_90", utm); }
     }, { passive:true });
   </script>
+
+
+
 </body>
 </html>
