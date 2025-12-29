@@ -493,7 +493,44 @@
     }, { passive:true });
   </script>
 
-
-
 </body>
+<script>
+(function(){
+  // ====== util ======
+  function readUtm(){
+    const u = new URL(window.location.href);
+    const keys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
+    const out = {};
+    keys.forEach(k => { const v = u.searchParams.get(k); if (v) out[k] = v; });
+    return out;
+  }
+  const utm = readUtm();
+
+  function pushEvent(eventName, params){
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
+  }
+
+  // ====== botão ======
+  var oldBtn = document.getElementById("btnOpenReport");
+  if (!oldBtn) return;
+
+  // CLONE remove TODOS os listeners já presos no elemento (origem da duplicação)
+  var btn = oldBtn.cloneNode(true);
+  oldBtn.parentNode.replaceChild(btn, oldBtn);
+
+  // 1 evento por clique (em capture + stopImmediatePropagation, pra evitar sobras)
+  btn.addEventListener("click", function(e){
+    e.stopImmediatePropagation(); // impede outros listeners no mesmo elemento
+    // NÃO usar preventDefault, pra manter o target="_blank" abrindo normal
+
+    pushEvent("report_open", Object.assign({
+      link_url: btn.getAttribute("href"),
+      link_text: "open_report_button"
+    }, utm));
+  }, true);
+})();
+</script>
+
+
 </html>
