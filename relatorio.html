@@ -178,20 +178,6 @@
     .icon{width:18px;height:18px; display:inline-block}
 
     /* LANGUAGE SWITCH (PT / EN) */
-    .lang-switch{
-      position:fixed;
-      left:16px;
-      bottom:16px;
-      z-index:80;
-      display:flex;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:18px;
-      background:rgba(15,19,21,.86);
-      border:1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(10px);
-      box-shadow:0 14px 28px rgba(0,0,0,.22);
-    }
     .lang-btn{
       appearance:none;
       border:1px solid rgba(255,255,255,.16);
@@ -229,7 +215,6 @@
       .hero .wrap{grid-template-columns:1fr}
       .hero-art{display:none}
       .report{grid-template-columns:1fr}
-      .lang-switch{left:12px; bottom:12px}
     }
   </style>
 </head>
@@ -297,17 +282,17 @@
         <span class="bubble b4"></span>
         <div class="hero-card">
           <div class="kicker">
-            <span data-lang="pt" class="show inline">Em breve</span>
-            <span data-lang="en" class="inline">Coming soon</span>
+            <span data-lang="pt" class="show inline"><!-- container reservado para conteúdo futuro --></span>
+            <span data-lang="en" class="inline"><!-- container reservado para conteúdo futuro --></span>
           </div>
 
           <p class="meta">
             <span data-lang="pt" class="show inline">
-              Container reservado para complementar com informações e destaques do relatório.
+              <!-- container reservado para conteúdo futuro -->
             </span>
 
             <span data-lang="en" class="inline">
-              Reserved container to add highlights and information about the report.
+              <!-- container reservado para conteúdo futuro -->
             </span>
           </p>
         </div>
@@ -391,16 +376,6 @@
       <div style="color:#94a3b8">© <span id="y"></span> JubartData. All rights reserved.</div>
     </div>
   </footer>
-
-  <!-- Language switch (PT/EN) -->
-  <div class="lang-switch" aria-label="Idioma">
-    <button class="lang-btn active" type="button" data-set-lang="pt" id="btnLangPt">
-      <span class="flag">🇧🇷</span> PT
-    </button>
-    <button class="lang-btn" type="button" data-set-lang="en" id="btnLangEn">
-      <span class="flag">🇺🇸</span> EN
-    </button>
-  </div>
 
 
   <script>
