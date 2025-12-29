@@ -29,6 +29,7 @@
     :root{
       --bg:#1f2426; --ink:#0b5563; --brand:#f2b705;
       --card:#ffffff; --muted:#6b7280; --light:#eef2f5; --ink-2:#0f1315;
+      --nav:#0f1315;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
@@ -38,11 +39,12 @@
     }
     a{color:var(--ink);text-decoration:none}
     a:hover{text-decoration:underline}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace}
 
     /* NAV */
     .nav{
       position:sticky; top:0; z-index:50;
-      background:#0f1315; border-bottom:1px solid #0b1a20;
+      background:var(--nav); border-bottom:1px solid #0b1a20;
     }
     .nav .wrap{
       display:flex; justify-content:space-between; align-items:center; gap:16px;
@@ -51,16 +53,21 @@
     .brand{display:flex; align-items:center; gap:10px}
     .brand img{height:28px}
     .brand span{color:#f9fafb; font-weight:800; letter-spacing:.4px}
+
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px; border-radius:999px;
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-      color:#e2e8f0; font-weight:700; font-size:13px;
+      color:#e2e8f0; font-weight:800; font-size:13px;
       transition:transform .15s ease, background .15s ease, border-color .15s ease;
       cursor:pointer;
+      white-space:nowrap;
     }
     .pill:hover{transform:translateY(-1px); border-color:#475569; background:rgba(255,255,255,.10)}
     .pill:active{transform:translateY(0px)}
+
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--brand);display:inline-block}
+
     .container{max-width:1100px;margin:auto;padding:24px}
 
     /* HERO */
@@ -77,6 +84,7 @@
     }
     .h1{font-size:clamp(30px,4.6vw,44px); line-height:1.12; margin:0 0 10px}
     .lead{font-size:clamp(15px,2vw,18px); color:#d6dee3; margin:0}
+
     .hero-art{
       position:relative; height:260px;
       border-radius:18px; border:1px solid rgba(255,255,255,.10);
@@ -111,24 +119,21 @@
     .hero-card .kicker{
       display:inline-block;
       font-size:12px; letter-spacing:.06em; text-transform:uppercase;
-      color:rgba(242,183,5,.95); font-weight:800;
+      color:rgba(242,183,5,.95); font-weight:900;
       margin-bottom:6px;
     }
     .hero-card .meta{
-      display:flex; gap:10px; flex-wrap:wrap; margin:0;
-      color:#e2e8f0; font-weight:700; font-size:13px;
+      margin:0;
+      color:#e2e8f0; font-weight:800; font-size:13px;
+      line-height:1.35;
     }
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--brand);display:inline-block;margin-top:5px}
 
     /* CONTENT */
     .section{padding:22px 0}
     .section-title{font-size:22px; margin:0 0 8px; position:relative}
     .section-title::after{content:""; display:block; width:64px; height:4px; background:var(--brand); border-radius:2px; margin-top:6px}
-    .muted{color:var(--muted); font-size:14px; line-height:1.55}
-    .grid{display:grid; gap:18px}
-    .g-2{grid-template-columns:repeat(2,1fr)}
+    .muted{color:var(--muted); font-size:14px; line-height:1.6}
     .card{background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:20px}
-    @media (max-width:900px){ .g-2{grid-template-columns:1fr} .hero .wrap{grid-template-columns:1fr} .hero-art{display:none} }
 
     /* REPORT CARD */
     .report{
@@ -139,44 +144,76 @@
       border-radius:14px; border:1px solid #e5e7eb; background:#fff; padding:10px;
     }
     .report .eyebrow{
-      font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+      font-size:12px; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
       color:#b88600; margin-bottom:6px;
     }
     .report h2{margin:0 0 8px; font-size:24px; line-height:1.25}
     .btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
     .btn{
       padding:12px 16px; border-radius:12px; border:2px solid transparent;
-      font-weight:800; font-size:14px; cursor:pointer;
+      font-weight:900; font-size:14px; cursor:pointer;
       display:inline-flex; align-items:center; gap:8px;
       transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
     }
     .btn:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(16,24,40,.10)}
     .btn:active{transform:translateY(0px)}
     .btn-primary{background:var(--brand); color:#0b1a20; border-color:var(--brand)}
-    .btn-ghost{background:#fff; border-color:#e5e7eb; color:#0f172a}
     .icon{width:18px;height:18px; display:inline-block}
 
-    /* MINI LIST */
-    .editions{margin:0; padding:0; list-style:none; display:grid; gap:10px}
-    .edition{
-      display:flex; justify-content:space-between; align-items:center; gap:14px;
-      padding:12px 14px; border-radius:14px;
-      border:1px solid #e5e7eb; background:#fff;
-      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    /* LANGUAGE SWITCH (PT / EN) */
+    .lang-switch{
+      position:fixed;
+      left:16px;
+      bottom:16px;
+      z-index:80;
+      display:flex;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:18px;
+      background:rgba(15,19,21,.86);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      box-shadow:0 14px 28px rgba(0,0,0,.22);
     }
-    .edition:hover{transform:translateY(-1px); box-shadow:0 10px 20px rgba(16,24,40,.08); border-color:#d7dde3}
-    .edition strong{display:block}
-    .edition small{color:#64748b}
-    .edition .actions{display:flex; gap:8px; flex-wrap:wrap}
-    .btn-mini{
-      padding:8px 10px; border-radius:10px; border:1px solid #e5e7eb;
-      background:#fff; font-weight:800; font-size:12px; color:#0f172a; cursor:pointer;
+    .lang-btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      color:#e2e8f0;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:900;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
     }
-    .btn-mini.primary{background:rgba(242,183,5,.18); border-color:rgba(242,183,5,.45)}
-    .btn-mini:hover{border-color:#cbd5e1}
+    .lang-btn:hover{transform:translateY(-1px); border-color:#475569; background:rgba(255,255,255,.10)}
+    .lang-btn.active{
+      background:rgba(242,183,5,.22);
+      border-color:rgba(242,183,5,.55);
+      color:#fff;
+    }
+    .flag{font-size:15px; line-height:1}
 
     /* FOOTER */
     .footer{padding:32px 0; color:#cbd5e1; background:#0f1315; border-top:1px solid #0b1a20}
+
+    /* LANGUAGE VISIBILITY */
+    [data-lang]{display:none}
+    [data-lang].show{display:inline}
+    [data-lang].show.block{display:block}
+    [data-lang].show.inline{display:inline}
+
+    @media (max-width:900px){
+      .hero .wrap{grid-template-columns:1fr}
+      .hero-art{display:none}
+      .report{grid-template-columns:1fr}
+      .lang-switch{left:12px; bottom:12px}
+    }
   </style>
 </head>
 
@@ -194,9 +231,10 @@
       </a>
 
       <a class="pill" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer"
-         id="cta_whatsapp_top"
-         data-track="whatsapp_top">
-        <span class="dot" aria-hidden="true"></span> Falar com a Jubart
+         id="cta_whatsapp_top" data-track="whatsapp_top">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-lang="pt" class="show inline">Falar com a Jubart</span>
+        <span data-lang="en" class="inline">Talk to Jubart</span>
       </a>
     </div>
   </nav>
@@ -204,11 +242,23 @@
   <header class="hero">
     <div class="wrap">
       <div>
-        <h1 class="h1">Relatório semanal (página oficial)</h1>
-        <p class="lead">
-          Use esta página como link único em e-mails, WhatsApp, LinkedIn e campanhas.
-          Assim você contabiliza <strong>cliques na página</strong> e <strong>cliques no PDF</strong> no GA4/Google Ads.
-        </p>
+        <div data-lang="pt" class="show block">
+          <h1 class="h1">Relatório semanal (página oficial)</h1>
+          <p class="lead">
+            Use esta página como link oficial para divulgar os relatórios semanais da JubartData.
+            Aqui você acessa a edição mais recente do <strong>Observatório Nacional de Preços do Pescado</strong>
+            e acompanha os principais movimentos do varejo brasileiro com base em dados.
+          </p>
+        </div>
+
+        <div data-lang="en" class="block">
+          <h1 class="h1">Weekly report (official page)</h1>
+          <p class="lead">
+            Use this page as the official link to share JubartData’s weekly reports.
+            Here you can access the latest edition of the <strong>National Fish &amp; Seafood Price Observatory</strong>
+            and monitor key movements in the Brazilian retail market based on structured data.
+          </p>
+        </div>
       </div>
 
       <div class="hero-art" aria-hidden="true">
@@ -217,11 +267,23 @@
         <span class="bubble b3"></span>
         <span class="bubble b4"></span>
         <div class="hero-card">
-          <div class="kicker">Medição pronta para campanha</div>
-          <p class="meta" style="margin:0">
-            • page_view do /relatorio.html<br/>
-            • evento “report_open” no clique do botão<br/>
-            • UTM (source/medium/campaign) automaticamente lido
+          <div class="kicker">
+            <span data-lang="pt" class="show inline">Medição pronta para campanha</span>
+            <span data-lang="en" class="inline">Campaign-ready measurement</span>
+          </div>
+
+          <p class="meta">
+            <span data-lang="pt" class="show inline">
+              • page_view do /relatorio.html<br/>
+              • evento “report_open” no clique do botão<br/>
+              • UTM (source/medium/campaign) automaticamente lido
+            </span>
+
+            <span data-lang="en" class="inline">
+              • page_view on /relatorio.html<br/>
+              • “report_open” event on button click<br/>
+              • UTM (source/medium/campaign) automatically captured
+            </span>
           </p>
         </div>
       </div>
@@ -230,16 +292,37 @@
 
   <main class="container">
     <section class="section">
-      <h2 class="section-title">Edição em destaque</h2>
+      <h2 class="section-title">
+        <span data-lang="pt" class="show inline">Edição em destaque</span>
+        <span data-lang="en" class="inline">Featured edition</span>
+      </h2>
 
       <div class="card report">
         <div>
-          <div class="eyebrow">Observatório Nacional de Preços do Pescado</div>
-          <h2 id="reportTitle">Última edição</h2>
+          <div class="eyebrow">
+            <span data-lang="pt" class="show inline">Observatório Nacional de Preços do Pescado</span>
+            <span data-lang="en" class="inline">National Fish &amp; Seafood Price Observatory</span>
+          </div>
+
+          <h2 id="reportTitle">
+            <span data-lang="pt" class="show inline">Última edição</span>
+            <span data-lang="en" class="inline">Latest edition</span>
+          </h2>
+
           <p class="muted" id="reportDesc">
-            Clique em <strong>Abrir relatório</strong> para registrar o evento de acesso ao PDF.
-            Se você divulgar este link com UTM (ex: <code>?utm_source=linkedin&utm_medium=social&utm_campaign=relatorio_semanal</code>),
-            o GA4 vai atribuir origem/campanha automaticamente.
+            <span data-lang="pt" class="show inline">
+              Este relatório consolida a variação semanal de preços de pescados no varejo brasileiro, com base em
+              coleta sistemática, tratamento estatístico e análise comparativa por espécie, categoria e região.
+              <br/><br/>
+              Clique em <strong>Abrir relatório</strong> para registrar o evento de acesso ao PDF no GA4/Google Ads.
+            </span>
+
+            <span data-lang="en" class="inline">
+              This report consolidates weekly price variations of fish and seafood in the Brazilian retail market,
+              based on systematic data collection, statistical treatment and comparative analysis by species, category and region.
+              <br/><br/>
+              Click <strong>Open report</strong> to register the PDF access event in GA4/Google Ads.
+            </span>
           </p>
 
           <div class="btn-row">
@@ -249,15 +332,32 @@
                 <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-8-6Z" stroke="currentColor" stroke-width="2"/>
                 <path d="M14 3v6h8" stroke="currentColor" stroke-width="2"/>
               </svg>
-              Abrir relatório (PDF)
+              <span data-lang="pt" class="show inline">Abrir relatório (PDF)</span>
+              <span data-lang="en" class="inline">Open report (PDF)</span>
             </a>
-
-            
           </div>
 
           <p class="muted" style="margin-top:10px">
-            <strong>Dica:</strong> se quiser “fixar” a edição do PDF por campanha, use o parâmetro <code>?pdf=</code>.
-            Exemplo: <code>/relatorio.html?pdf=/publicacoes/Relatorio%20semanal%20JubartData.pdf</code>
+            <span data-lang="pt" class="show inline">
+              <strong>Dica:</strong> se quiser “fixar” a edição do PDF por campanha, use o parâmetro <code>?pdf=</code>.
+              Exemplo: <code>/relatorio.html?pdf=/publicacoes/Relatorio-semanal-JubartData.pdf</code>
+            </span>
+
+            <span data-lang="en" class="inline">
+              <strong>Tip:</strong> if you want to “pin” a specific PDF edition per campaign, use the <code>?pdf=</code> parameter.
+              Example: <code>/relatorio.html?pdf=/publicacoes/Relatorio-semanal-JubartData.pdf</code>
+            </span>
+          </p>
+
+          <p class="muted" style="margin-top:10px">
+            <span data-lang="pt" class="show inline">
+              <strong>Nota metodológica:</strong> dados coletados diretamente de canais digitais do varejo, organizados por mediana semanal
+              e analisados com foco em variações relativas e padrões de mercado.
+            </span>
+            <span data-lang="en" class="inline">
+              <strong>Methodological note:</strong> data are collected directly from retailers’ digital channels, organized using weekly medians
+              and analyzed with a focus on relative price changes and market patterns.
+            </span>
           </p>
         </div>
 
@@ -266,19 +366,28 @@
         </div>
       </div>
     </section>
-
-    
   </main>
 
   <footer class="footer">
     <div class="container" style="display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
       <div style="display:flex;align-items:center;gap:10px">
         <img src="imagens/logo_escura.png" alt="JubartData" style="height:26px"/>
-        <span>JubartData — From Brazil to the World</span>
+        <span data-lang="pt" class="show inline">JubartData — Do Brasil para o Mundo</span>
+        <span data-lang="en" class="inline">JubartData — From Brazil to the World</span>
       </div>
       <div style="color:#94a3b8">© <span id="y"></span> JubartData. All rights reserved.</div>
     </div>
   </footer>
+
+  <!-- Language switch (PT/EN) -->
+  <div class="lang-switch" aria-label="Idioma">
+    <button class="lang-btn active" type="button" data-set-lang="pt" id="btnLangPt">
+      <span class="flag">🇧🇷</span> PT
+    </button>
+    <button class="lang-btn" type="button" data-set-lang="en" id="btnLangEn">
+      <span class="flag">🇺🇸</span> EN
+    </button>
+  </div>
 
   <script>
     // Ano do rodapé
@@ -287,7 +396,7 @@
     // ========= Config =========
     // PDF default (pode ser substituído por ?pdf=/publicacoes/arquivo.pdf)
     const DEFAULT_PDF = "/publicacoes/Relatorio-semanal-JubartData.pdf";
-    
+
     // ========= Helpers =========
     function getParam(name){
       const url = new URL(window.location.href);
@@ -299,7 +408,7 @@
       window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
     }
 
-    // Captura UTM para anexar no evento (sem depender de configuração adicional)
+    // Captura UTM para anexar no evento
     function readUtm(){
       const u = new URL(window.location.href);
       const keys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
@@ -311,72 +420,73 @@
       return out;
     }
 
+    const utm = readUtm();
+
+    // ========= Language (modelo do index) =========
+    const DEFAULT_LANG = "pt";
+
+    function setLang(lang){
+      // troca visibilidade
+      document.querySelectorAll("[data-lang]").forEach(el => {
+        const isMatch = el.getAttribute("data-lang") === lang;
+        const isBlock = el.classList.contains("block");
+        const isInline = el.classList.contains("inline");
+        el.classList.toggle("show", isMatch);
+        // nada a fazer aqui além do show; block/inline já estão nas classes base
+      });
+
+      // marca botões
+      const bpt = document.getElementById("btnLangPt");
+      const ben = document.getElementById("btnLangEn");
+      if (bpt && ben){
+        bpt.classList.toggle("active", lang === "pt");
+        ben.classList.toggle("active", lang === "en");
+      }
+
+      // html lang
+      document.documentElement.lang = (lang === "en") ? "en" : "pt-br";
+
+      // persistência
+      try{ localStorage.setItem("jubart_lang", lang); }catch(e){}
+
+      // evento (útil para análise)
+      pushEvent("lang_change", Object.assign({ language: lang }, utm));
+    }
+
+    document.querySelectorAll("[data-set-lang]").forEach(btn => {
+      btn.addEventListener("click", () => setLang(btn.getAttribute("data-set-lang")));
+    });
+
+    const saved = (() => {
+      try{ return localStorage.getItem("jubart_lang"); }catch(e){ return null; }
+    })();
+    setLang(saved || DEFAULT_LANG);
+
     // ========= Bind PDF link =========
     const reportPdf = getParam("pdf") || DEFAULT_PDF;
     const btnOpen = document.getElementById("btnOpenReport");
-    btnOpen.href = reportPdf;
-
-    // Eventos de clique (GTM/GA4)
-    const utm = readUtm();
-
-    btnOpen.addEventListener("click", function(){
-      pushEvent("report_open", Object.assign({
-        link_url: reportPdf,
-        link_text: "Abrir relatório (PDF)"
-      }, utm));
-      // Observação: o clique abre em nova aba (target=_blank),
-      // então não precisamos segurar navegação.
-    });
-
-
-
-    // WhatsApp
-    ["cta_whatsapp_top", "cta_whatsapp_mid"].forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener("click", function(){
-        pushEvent("whatsapp_click", Object.assign({
-          link_url: el.href,
-          placement: id
+    if (btnOpen){
+      btnOpen.href = reportPdf;
+      btnOpen.addEventListener("click", function(){
+        pushEvent("report_open", Object.assign({
+          link_url: reportPdf,
+          link_text: "open_report_button"
         }, utm));
       });
-    });
-
-    // ========= Render editions =========
-    const list = document.getElementById("editionsList");
-    if (list && EDITIONS.length){
-      EDITIONS.forEach((it, idx) => {
-        const li = document.createElement("li");
-        li.className = "edition";
-        li.innerHTML = `
-          <div>
-            <strong>${it.title}</strong>
-            <small>${it.pdf}</small>
-          </div>
-          <div class="actions">
-            <a class="btn-mini primary" href="${it.pdf}" target="_blank" rel="noopener noreferrer" data-edition="${idx}">
-              Abrir PDF
-            </a>
-          </div>
-        `;
-        li.querySelector("a").addEventListener("click", function(){
-          pushEvent("report_open", Object.assign({
-            link_url: it.pdf,
-            link_text: it.title,
-            edition_index: idx
-          }, utm));
-        });
-        list.appendChild(li);
-      });
-    } else if (list){
-      list.innerHTML = `
-        <li class="muted" style="padding:10px 0">
-          (sem lista configurada) — se quiser, preencha o array <code>EDITIONS</code> no final do arquivo.
-        </li>
-      `;
     }
 
-    // ========= Optional: scroll depth (útil p/ GA4) =========
+    // WhatsApp click (top CTA)
+    const waTop = document.getElementById("cta_whatsapp_top");
+    if (waTop){
+      waTop.addEventListener("click", function(){
+        pushEvent("whatsapp_click", Object.assign({
+          link_url: waTop.href,
+          placement: "top"
+        }, utm));
+      });
+    }
+
+    // Scroll depth (útil p/ GA4)
     let maxScroll = 0;
     window.addEventListener("scroll", () => {
       const h = document.documentElement;
