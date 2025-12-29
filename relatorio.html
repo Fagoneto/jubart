@@ -42,6 +42,23 @@
     code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace}
 
     /* NAV */
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .lang-top{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-top .lang-btn{
+      padding:6px 10px;
+      font-size:12px;
+      border-radius:999px;
+    }
+
     .nav{
       position:sticky; top:0; z-index:50;
       background:var(--nav); border-bottom:1px solid #0b1a20;
@@ -230,12 +247,26 @@
         <span>JubartData</span>
       </a>
 
-      <a class="pill" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer"
-         id="cta_whatsapp_top" data-track="whatsapp_top">
-        <span class="dot" aria-hidden="true"></span>
-        <span data-lang="pt" class="show inline">Falar com a Jubart</span>
-        <span data-lang="en" class="inline">Talk to Jubart</span>
-      </a>
+      <div class="nav-actions">
+        <!-- Language switch -->
+        <div class="lang-top">
+          <button class="lang-btn active" type="button" data-set-lang="pt" id="btnLangPt">
+            🇧🇷 PT
+          </button>
+          <button class="lang-btn" type="button" data-set-lang="en" id="btnLangEn">
+            🇺🇸 EN
+          </button>
+        </div>
+
+        <!-- WhatsApp -->
+        <a class="pill" href="https://wa.me/5561993553849"
+          target="_blank" rel="noopener noreferrer"
+          id="cta_whatsapp_top">
+          <span class="dot"></span>
+          <span data-lang="pt" class="show inline">Falar com a Jubart</span>
+          <span data-lang="en" class="inline">Talk to Jubart</span>
+        </a>
+      </div>
     </div>
   </nav>
 
@@ -243,18 +274,16 @@
     <div class="wrap">
       <div>
         <div data-lang="pt" class="show block">
-          <h1 class="h1">Relatório semanal (página oficial)</h1>
+          <h1 class="h1">Relatório semanal</h1>
           <p class="lead">
-            Use esta página como link oficial para divulgar os relatórios semanais da JubartData.
             Aqui você acessa a edição mais recente do <strong>Observatório Nacional de Preços do Pescado</strong>
             e acompanha os principais movimentos do varejo brasileiro com base em dados.
           </p>
         </div>
 
         <div data-lang="en" class="block">
-          <h1 class="h1">Weekly report (official page)</h1>
+          <h1 class="h1">Weekly report</h1>
           <p class="lead">
-            Use this page as the official link to share JubartData’s weekly reports.
             Here you can access the latest edition of the <strong>National Fish &amp; Seafood Price Observatory</strong>
             and monitor key movements in the Brazilian retail market based on structured data.
           </p>
@@ -268,21 +297,17 @@
         <span class="bubble b4"></span>
         <div class="hero-card">
           <div class="kicker">
-            <span data-lang="pt" class="show inline">Medição pronta para campanha</span>
-            <span data-lang="en" class="inline">Campaign-ready measurement</span>
+            <span data-lang="pt" class="show inline">Em breve</span>
+            <span data-lang="en" class="inline">Coming soon</span>
           </div>
 
           <p class="meta">
             <span data-lang="pt" class="show inline">
-              • page_view do /relatorio.html<br/>
-              • evento “report_open” no clique do botão<br/>
-              • UTM (source/medium/campaign) automaticamente lido
+              Container reservado para complementar com informações e destaques do relatório.
             </span>
 
             <span data-lang="en" class="inline">
-              • page_view on /relatorio.html<br/>
-              • “report_open” event on button click<br/>
-              • UTM (source/medium/campaign) automatically captured
+              Reserved container to add highlights and information about the report.
             </span>
           </p>
         </div>
@@ -313,15 +338,13 @@
             <span data-lang="pt" class="show inline">
               Este relatório consolida a variação semanal de preços de pescados no varejo brasileiro, com base em
               coleta sistemática, tratamento estatístico e análise comparativa por espécie, categoria e região.
-              <br/><br/>
-              Clique em <strong>Abrir relatório</strong> para registrar o evento de acesso ao PDF no GA4/Google Ads.
+              
             </span>
 
             <span data-lang="en" class="inline">
               This report consolidates weekly price variations of fish and seafood in the Brazilian retail market,
               based on systematic data collection, statistical treatment and comparative analysis by species, category and region.
-              <br/><br/>
-              Click <strong>Open report</strong> to register the PDF access event in GA4/Google Ads.
+              
             </span>
           </p>
 
@@ -337,17 +360,7 @@
             </a>
           </div>
 
-          <p class="muted" style="margin-top:10px">
-            <span data-lang="pt" class="show inline">
-              <strong>Dica:</strong> se quiser “fixar” a edição do PDF por campanha, use o parâmetro <code>?pdf=</code>.
-              Exemplo: <code>/relatorio.html?pdf=/publicacoes/Relatorio-semanal-JubartData.pdf</code>
-            </span>
-
-            <span data-lang="en" class="inline">
-              <strong>Tip:</strong> if you want to “pin” a specific PDF edition per campaign, use the <code>?pdf=</code> parameter.
-              Example: <code>/relatorio.html?pdf=/publicacoes/Relatorio-semanal-JubartData.pdf</code>
-            </span>
-          </p>
+          
 
           <p class="muted" style="margin-top:10px">
             <span data-lang="pt" class="show inline">
@@ -388,6 +401,7 @@
       <span class="flag">🇺🇸</span> EN
     </button>
   </div>
+
 
   <script>
     // Ano do rodapé
