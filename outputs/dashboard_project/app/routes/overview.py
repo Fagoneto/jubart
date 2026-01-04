@@ -173,5 +173,6 @@ async def overview_page(
         "grafico_distribuicao": grafico_donut,
     })
     resp.headers["ETag"] = version
-    resp.headers["Cache-Control"] = "public, max-age=2592000, must-revalidate"
+    #resp.headers["Cache-Control"] = "public, max-age=2592000, must-revalidate"
+    resp.headers["Cache-Control"] = "no-store, max-age=0"
     return resp
