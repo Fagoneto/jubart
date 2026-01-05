@@ -383,10 +383,6 @@
 
 
 
-
-
-
-
   <script>
     // ========= Jubart Analytics helpers (únicos) =========
     (function () {
@@ -477,13 +473,14 @@
     })();
     setLang(savedLang || DEFAULT_LANG);
 
+
     // ========= Bind PDF link =========
     const reportPdf = window.Jubart.getParam("pdf") || DEFAULT_PDF;
     const btnOpen = document.getElementById("btnOpenReport");
+
     if (btnOpen) {
       btnOpen.href = reportPdf;
 
-      // evita duplicar listener caso o script rode 2x
       if (!btnOpen.dataset.bound) {
         btnOpen.dataset.bound = "1";
         btnOpen.addEventListener("click", function () {
@@ -491,6 +488,8 @@
             "report_open",
             Object.assign(
               {
+                report_id: "relatorio_semanal",
+                report_type: "observatorio_precos_pescado",
                 link_url: btnOpen.href,
                 link_text: "open_report_button",
                 page_path: location.pathname,
@@ -503,8 +502,10 @@
       }
     }
 
+
     // ========= WhatsApp click (top CTA) =========
     const waTop = document.getElementById("cta_whatsapp_top");
+
     if (waTop) {
       if (!waTop.dataset.bound) {
         waTop.dataset.bound = "1";
@@ -514,9 +515,10 @@
             Object.assign(
               {
                 link_url: waTop.href,
+                link_text: "cta_whatsapp_top",
                 placement: "top",
                 page_path: location.pathname,
-                page_lang: (savedLang || DEFAULT_LANG),
+                page_lang: getCurrentLang(),
               },
               utm
             )
@@ -524,6 +526,7 @@
         });
       }
     }
+
 
     // ========= Scroll depth =========
     let maxScroll = 0;
