@@ -483,21 +483,20 @@
 
       if (!btnOpen.dataset.bound) {
         btnOpen.dataset.bound = "1";
-        btnOpen.addEventListener("click", function () {
-          window.Jubart.pushEvent(
-            "report_open",
-            Object.assign(
-              {
-                report_id: "relatorio_semanal",
-                report_type: "observatorio_precos_pescado",
-                link_url: btnOpen.href,
-                link_text: "open_report_button",
-                page_path: location.pathname,
-                page_lang: getCurrentLang(),
-              },
-              utm
-            )
-          );
+        btnOpen.addEventListener("click", function (e) {
+          e.preventDefault(); // segura a navegação
+
+          window.Jubart.pushEvent("report_open", {
+            link_url: btnOpen.href,
+            link_text: "open_report_button",
+            page_path: location.pathname,
+            page_lang: getCurrentLang(),
+          });
+
+          // dá tempo para o GA4 receber
+          setTimeout(() => {
+            window.open(btnOpen.href, "_blank", "noopener");
+          }, 300);
         });
       }
     }
