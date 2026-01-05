@@ -382,155 +382,187 @@
   </footer>
 
 
+
+
+
+
+
   <script>
-    // Ano do rodapé
-    const y = document.getElementById('y'); if (y) y.textContent = new Date().getFullYear();
+    // ========= Jubart Analytics helpers (únicos) =========
+    (function () {
+      function getParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+
+      function readUtm() {
+        const u = new URL(window.location.href);
+        const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+        const out = {};
+        keys.forEach((k) => {
+          const v = u.searchParams.get(k);
+          if (v) out[k] = v;
+        });
+        return out;
+      }
+
+      function pushEvent(eventName, params) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
+      }
+
+      window.Jubart = window.Jubart || {};
+      window.Jubart.getParam = getParam;
+      window.Jubart.readUtm = readUtm;
+      window.Jubart.pushEvent = pushEvent;
+    })();
+
+    // ========= Ano do rodapé =========
+    const y = document.getElementById("y");
+    if (y) y.textContent = new Date().getFullYear();
 
     // ========= Config =========
-    // PDF default (pode ser substituído por ?pdf=/publicacoes/arquivo.pdf)
     const DEFAULT_PDF = "/publicacoes/Relatorio-semanal-JubartData.pdf";
-
-    // ========= Helpers =========
-    function getParam(name){
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
-    }
-
-    function pushEvent(eventName, params){
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
-    }
-
-    // Captura UTM para anexar no evento
-    function readUtm(){
-      const u = new URL(window.location.href);
-      const keys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
-      const out = {};
-      keys.forEach(k => {
-        const v = u.searchParams.get(k);
-        if (v) out[k] = v;
-      });
-      return out;
-    }
-
-    const utm = readUtm();
-
-    // ========= Language (modelo do index) =========
     const DEFAULT_LANG = "pt";
+    function getCurrentLang(){
+      try {
+        return localStorage.getItem("jubart_lang") || DEFAULT_LANG;
+      } catch (e) {
+        return DEFAULT_LANG;
+      }
+    }
 
-    function setLang(lang){
+
+    // ========= Context (UTM) =========
+    const utm = window.Jubart.readUtm();
+
+    // ========= Language =========
+    function setLang(lang) {
       // troca visibilidade
-      document.querySelectorAll("[data-lang]").forEach(el => {
+      document.querySelectorAll("[data-lang]").forEach((el) => {
         const isMatch = el.getAttribute("data-lang") === lang;
-        const isBlock = el.classList.contains("block");
-        const isInline = el.classList.contains("inline");
         el.classList.toggle("show", isMatch);
-        // nada a fazer aqui além do show; block/inline já estão nas classes base
       });
 
       // marca botões
       const bpt = document.getElementById("btnLangPt");
       const ben = document.getElementById("btnLangEn");
-      if (bpt && ben){
+      if (bpt && ben) {
         bpt.classList.toggle("active", lang === "pt");
         ben.classList.toggle("active", lang === "en");
       }
 
       // html lang
-      document.documentElement.lang = (lang === "en") ? "en" : "pt-br";
+      document.documentElement.lang = lang === "en" ? "en" : "pt-br";
 
       // persistência
-      try{ localStorage.setItem("jubart_lang", lang); }catch(e){}
+      try {
+        localStorage.setItem("jubart_lang", lang);
+      } catch (e) {}
 
-      // evento (útil para análise)
-      pushEvent("lang_change", Object.assign({ language: lang }, utm));
+      // evento
+      window.Jubart.pushEvent("lang_change", Object.assign({ language: lang }, utm));
     }
 
-    document.querySelectorAll("[data-set-lang]").forEach(btn => {
+    document.querySelectorAll("[data-set-lang]").forEach((btn) => {
       btn.addEventListener("click", () => setLang(btn.getAttribute("data-set-lang")));
     });
 
-    const saved = (() => {
-      try{ return localStorage.getItem("jubart_lang"); }catch(e){ return null; }
+    const savedLang = (() => {
+      try {
+        return localStorage.getItem("jubart_lang");
+      } catch (e) {
+        return null;
+      }
     })();
-    setLang(saved || DEFAULT_LANG);
+    setLang(savedLang || DEFAULT_LANG);
 
     // ========= Bind PDF link =========
-    const reportPdf = getParam("pdf") || DEFAULT_PDF;
+    const reportPdf = window.Jubart.getParam("pdf") || DEFAULT_PDF;
     const btnOpen = document.getElementById("btnOpenReport");
-    if (btnOpen){
+    if (btnOpen) {
       btnOpen.href = reportPdf;
-      btnOpen.addEventListener("click", function(){
-        pushEvent("report_open", Object.assign({
-          link_url: reportPdf,
-          link_text: "open_report_button"
-        }, utm));
-      });
+
+      // evita duplicar listener caso o script rode 2x
+      if (!btnOpen.dataset.bound) {
+        btnOpen.dataset.bound = "1";
+        btnOpen.addEventListener("click", function () {
+          window.Jubart.pushEvent(
+            "report_open",
+            Object.assign(
+              {
+                link_url: btnOpen.href,
+                link_text: "open_report_button",
+                page_path: location.pathname,
+                page_lang: getCurrentLang(),
+              },
+              utm
+            )
+          );
+        });
+      }
     }
 
-    // WhatsApp click (top CTA)
+    // ========= WhatsApp click (top CTA) =========
     const waTop = document.getElementById("cta_whatsapp_top");
-    if (waTop){
-      waTop.addEventListener("click", function(){
-        pushEvent("whatsapp_click", Object.assign({
-          link_url: waTop.href,
-          placement: "top"
-        }, utm));
-      });
+    if (waTop) {
+      if (!waTop.dataset.bound) {
+        waTop.dataset.bound = "1";
+        waTop.addEventListener("click", function () {
+          window.Jubart.pushEvent(
+            "whatsapp_click",
+            Object.assign(
+              {
+                link_url: waTop.href,
+                placement: "top",
+                page_path: location.pathname,
+                page_lang: (savedLang || DEFAULT_LANG),
+              },
+              utm
+            )
+          );
+        });
+      }
     }
 
-    // Scroll depth (útil p/ GA4)
+    // ========= Scroll depth =========
     let maxScroll = 0;
-    window.addEventListener("scroll", () => {
-      const h = document.documentElement;
-      const scrolled = (h.scrollTop || document.body.scrollTop);
-      const height = (h.scrollHeight - h.clientHeight);
-      const pct = height > 0 ? Math.round((scrolled / height) * 100) : 0;
-      if (pct >= 25 && maxScroll < 25){ maxScroll = 25; pushEvent("scroll_25", utm); }
-      if (pct >= 50 && maxScroll < 50){ maxScroll = 50; pushEvent("scroll_50", utm); }
-      if (pct >= 75 && maxScroll < 75){ maxScroll = 75; pushEvent("scroll_75", utm); }
-      if (pct >= 90 && maxScroll < 90){ maxScroll = 90; pushEvent("scroll_90", utm); }
-    }, { passive:true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        const h = document.documentElement;
+        const scrolled = h.scrollTop || document.body.scrollTop;
+        const height = h.scrollHeight - h.clientHeight;
+        const pct = height > 0 ? Math.round((scrolled / height) * 100) : 0;
+
+        if (pct >= 25 && maxScroll < 25) {
+          maxScroll = 25;
+          window.Jubart.pushEvent("scroll_25", utm);
+        }
+        if (pct >= 50 && maxScroll < 50) {
+          maxScroll = 50;
+          window.Jubart.pushEvent("scroll_50", utm);
+        }
+        if (pct >= 75 && maxScroll < 75) {
+          maxScroll = 75;
+          window.Jubart.pushEvent("scroll_75", utm);
+        }
+        if (pct >= 90 && maxScroll < 90) {
+          maxScroll = 90;
+          window.Jubart.pushEvent("scroll_90", utm);
+        }
+      },
+      { passive: true }
+    );
   </script>
 
+
+
+
+
+
+
+
 </body>
-<script>
-(function(){
-  // ====== util ======
-  function readUtm(){
-    const u = new URL(window.location.href);
-    const keys = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"];
-    const out = {};
-    keys.forEach(k => { const v = u.searchParams.get(k); if (v) out[k] = v; });
-    return out;
-  }
-  const utm = readUtm();
-
-  function pushEvent(eventName, params){
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
-  }
-
-  // ====== botão ======
-  var oldBtn = document.getElementById("btnOpenReport");
-  if (!oldBtn) return;
-
-  // CLONE remove TODOS os listeners já presos no elemento (origem da duplicação)
-  var btn = oldBtn.cloneNode(true);
-  oldBtn.parentNode.replaceChild(btn, oldBtn);
-
-  // 1 evento por clique (em capture + stopImmediatePropagation, pra evitar sobras)
-  btn.addEventListener("click", function(e){
-    e.stopImmediatePropagation(); // impede outros listeners no mesmo elemento
-    // NÃO usar preventDefault, pra manter o target="_blank" abrindo normal
-
-    pushEvent("report_open", Object.assign({
-      link_url: btn.getAttribute("href"),
-      link_text: "open_report_button"
-    }, utm));
-  }, true);
-})();
-</script>
-
 
 </html>
