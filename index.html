@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-5P5K4D5R');</script>
+  <!-- End Google Tag Manager -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JubartData — Inteligência Aplicada ao Varejo Brasileiro</title>
@@ -255,12 +263,102 @@
       box-shadow: 0 2px 6px rgba(0,0,0,.05); /* sombra leve */
     }
 
+    /* Card largo (relatórios) */
+
+    /* Card largo (Relatórios) */
+    .intel-card--wide{
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr; /* texto esquerda, imagem direita */
+      height: 260px;
+      overflow: hidden;
+      align-items: stretch;
+    }
+
+    /* Conteúdo: centralizar verticalmente */
+    .intel-card--wide .card-content{
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;  /* centraliza no eixo vertical */
+      gap: 10px;
+    }
+
+    /* Área da imagem: centralizar e reduzir a imagem */
+    .intel-card--wide .card-image{
+      height: 100%;
+      display: flex;
+      align-items: center;      /* centraliza vertical */
+      justify-content: center;  /* centraliza horizontal */
+      padding: 16px;            /* “respiro” para não colar nas bordas */
+      background: #fff;         /* igual aos cards */
+    }
+
+    /* Imagem menor e proporcional (não estica) */
+    .intel-card--wide .card-image img{
+      width: 100%;
+      max-height: 220px;        /* 👈 ajuste fino (140–170px) */
+      height: auto;
+      object-fit: contain;      /* 👈 mantém proporção */
+      display: block;
+    }
+
+    /* Botões no padrão: manter a mesma linha e espaçamento */
+    .intel-card--wide .card-actions{
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+
+    .card-content--center{
+  align-items: center;
+  text-align: center;
+}
+
+    /* Palavra "Relatório" */
+    .card-eyebrow{
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #f5a300; /* amarelo Jubart */
+      margin-bottom: 6px;
+    }
+
+    /* Título principal */
+    .card-title{
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+
+    /* Texto descritivo */
+    .card-description{
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 14px;
+      max-width: 420px; /* mantém leitura confortável */
+    }
+
+    /* Botões centralizados */
+    .card-content--center .card-actions{
+      justify-content: center;
+    }
+
+
 
 
 
   </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5P5K4D5R"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- NAV (apenas as bandeiras) -->
 <nav class="nav">
@@ -366,10 +464,35 @@
             <p>Leitura do varejo: preços, dispersão regional, clusters de lojas e efetividade de promoções.</p>
             <div class="btn-row">
                 <a class="btn-sm btn-primary" href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf">Baixar PDF</a>
-                <a class="btn-sm btn-ghost" href="#contato">Solicitar versão sob medida</a>
+                <a class="btn-sm btn-ghost" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">Solicitar versão sob medida</a>
             </div>
           </div>
         </article>
+
+      <article class="intel-card intel-card--wide">
+        <div class="card-content card-content--center">
+          <span class="card-eyebrow">Modelo de Relatório</span>
+
+          <h3 class="card-title">
+            Observatório Nacional de Preços do Pescado
+          </h3>
+
+          <p class="card-description">
+            Série semanal com leitura de preços, dispersão regional,
+            movimento promocional e clusters.
+          </p>
+
+          <div class="btn-row">
+            <a class="btn-sm btn-primary" href="publicacoes/Relatorio-semanal-JubartData.pdf">Veja a última edição</a>
+            <a class="btn-sm btn-ghost" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">Solicitar versão para seu setor</a>
+          </div>
+        </div>
+
+        <div class="card-image">
+          <img src="imagens/imagem_relatorio_semanal.png" alt="Relatório Semanal">
+        </div>
+      </article>
+
       </div>
     </section>
 
@@ -443,7 +566,7 @@
               </a>
             </li>
             <li>LinkedIn: 
-              <a href="https://www.linkedin.com/in/francisco-abra%C3%A3o-oliveira-19a62954/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.linkedin.com/company/jubartdata?trk=experience-timeline" target="_blank" rel="noopener noreferrer">
                 JubartData
               </a>
             </li>
@@ -536,6 +659,32 @@
             </div>
           </div>
         </article>
+
+
+      <article class="intel-card intel-card--wide">
+        <div class="card-content card-content--center">
+          <span class="card-eyebrow">Report Model</span>
+
+          <h3 class="card-title">
+            Brazilian Seafood Price Observatory
+          </h3>
+
+          <p class="card-description">
+            Weekly series with price monitoring, regional dispersion,
+            promotional dynamics, and competitive clustering.
+          </p>
+
+          <div class="btn-row">
+            <a class="btn-sm btn-primary" href="publicacoes/Relatorio-semanal-JubartData.pdf">View latest edition</a>
+            <a class="btn-sm btn-ghost" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">Request a version for your sector</a>
+          </div>
+        </div>
+
+        <div class="card-image">
+          <img src="imagens/imagem_relatorio_semanal.png" alt="Relatório Semanal">
+        </div>
+      </article>
+
       </div>
     </section>
 
