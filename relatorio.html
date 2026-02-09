@@ -436,7 +436,6 @@
   </footer>
 
 
-
   <script>
     // ========= Jubart Analytics helpers (únicos) =========
     (function () {
@@ -472,9 +471,11 @@
     if (y) y.textContent = new Date().getFullYear();
 
     // ========= Config =========
-    const DEFAULT_PDF = "/publicacoes/Relatorio-semanal-JubartData.pdf";
+    const PDF_PT = "/publicacoes/Relatorio-semanal-JubartData.pdf";
+    const PDF_EN = "/publicacoes/Weekly-Report-JubartData.pdf";
     const DEFAULT_LANG = "pt";
-    function getCurrentLang(){
+
+    function getCurrentLang() {
       try {
         return localStorage.getItem("jubart_lang") || DEFAULT_LANG;
       } catch (e) {
@@ -482,9 +483,53 @@
       }
     }
 
+    function getReportPdf() {
+      // Prioridade: ?pdf= na URL
+      const forced = window.Jubart.getParam("pdf");
+      if (forced) return forced;
+
+      // Senão: escolhe pelo idioma atual
+      return getCurrentLang() === "en" ? PDF_EN : PDF_PT;
+    }
 
     // ========= Context (UTM) =========
     const utm = window.Jubart.readUtm();
+
+    // ========= Bind PDF link =========
+    const btnOpen = document.getElementById("btnOpenReport");
+
+    function syncReportLink() {
+      if (!btnOpen) return;
+      btnOpen.href = getReportPdf();
+    }
+
+    if (btnOpen) {
+      // seta o link no carregamento
+      syncReportLink();
+
+      // bind de click (uma vez)
+      if (!btnOpen.dataset.bound) {
+        btnOpen.dataset.bound = "1";
+        btnOpen.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // garante href correto no momento do clique
+          syncReportLink();
+
+          window.Jubart.pushEvent("report_open", Object.assign({
+            link_url: btnOpen.href,
+            link_text: "open_report_button",
+            page_path: location.pathname,
+            page_lang: getCurrentLang(),
+          }, utm));
+
+          // dá tempo para o GA4 receber
+          setTimeout(() => {
+            window.open(btnOpen.href, "_blank", "noopener");
+          }, 300);
+        });
+      }
+    }
 
     // ========= Language =========
     function setLang(lang) {
@@ -510,6 +555,9 @@
         localStorage.setItem("jubart_lang", lang);
       } catch (e) {}
 
+      // atualiza o PDF conforme idioma
+      syncReportLink();
+
       // evento
       window.Jubart.pushEvent("lang_change", Object.assign({ language: lang }, utm));
     }
@@ -525,36 +573,8 @@
         return null;
       }
     })();
+
     setLang(savedLang || DEFAULT_LANG);
-
-
-    // ========= Bind PDF link =========
-    const reportPdf = window.Jubart.getParam("pdf") || DEFAULT_PDF;
-    const btnOpen = document.getElementById("btnOpenReport");
-
-    if (btnOpen) {
-      btnOpen.href = reportPdf;
-
-      if (!btnOpen.dataset.bound) {
-        btnOpen.dataset.bound = "1";
-        btnOpen.addEventListener("click", function (e) {
-          e.preventDefault(); // segura a navegação
-
-          window.Jubart.pushEvent("report_open", {
-            link_url: btnOpen.href,
-            link_text: "open_report_button",
-            page_path: location.pathname,
-            page_lang: getCurrentLang(),
-          });
-
-          // dá tempo para o GA4 receber
-          setTimeout(() => {
-            window.open(btnOpen.href, "_blank", "noopener");
-          }, 300);
-        });
-      }
-    }
-
 
     // ========= WhatsApp click (top CTA) =========
     const waTop = document.getElementById("cta_whatsapp_top");
@@ -563,23 +583,16 @@
       if (!waTop.dataset.bound) {
         waTop.dataset.bound = "1";
         waTop.addEventListener("click", function () {
-          window.Jubart.pushEvent(
-            "whatsapp_click",
-            Object.assign(
-              {
-                link_url: waTop.href,
-                link_text: "cta_whatsapp_top",
-                placement: "top",
-                page_path: location.pathname,
-                page_lang: getCurrentLang(),
-              },
-              utm
-            )
-          );
+          window.Jubart.pushEvent("whatsapp_click", Object.assign({
+            link_url: waTop.href,
+            link_text: "cta_whatsapp_top",
+            placement: "top",
+            page_path: location.pathname,
+            page_lang: getCurrentLang(),
+          }, utm));
         });
       }
     }
-
 
     // ========= Scroll depth =========
     let maxScroll = 0;
@@ -591,32 +604,14 @@
         const height = h.scrollHeight - h.clientHeight;
         const pct = height > 0 ? Math.round((scrolled / height) * 100) : 0;
 
-        if (pct >= 25 && maxScroll < 25) {
-          maxScroll = 25;
-          window.Jubart.pushEvent("scroll_25", utm);
-        }
-        if (pct >= 50 && maxScroll < 50) {
-          maxScroll = 50;
-          window.Jubart.pushEvent("scroll_50", utm);
-        }
-        if (pct >= 75 && maxScroll < 75) {
-          maxScroll = 75;
-          window.Jubart.pushEvent("scroll_75", utm);
-        }
-        if (pct >= 90 && maxScroll < 90) {
-          maxScroll = 90;
-          window.Jubart.pushEvent("scroll_90", utm);
-        }
+        if (pct >= 25 && maxScroll < 25) { maxScroll = 25; window.Jubart.pushEvent("scroll_25", utm); }
+        if (pct >= 50 && maxScroll < 50) { maxScroll = 50; window.Jubart.pushEvent("scroll_50", utm); }
+        if (pct >= 75 && maxScroll < 75) { maxScroll = 75; window.Jubart.pushEvent("scroll_75", utm); }
+        if (pct >= 90 && maxScroll < 90) { maxScroll = 90; window.Jubart.pushEvent("scroll_90", utm); }
       },
       { passive: true }
     );
   </script>
-
-
-
-
-
-
 
 
 </body>
