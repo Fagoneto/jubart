@@ -216,65 +216,6 @@
       .hero-art{display:none}
       .report{grid-template-columns:1fr}
     }
-    /* show/hide language blocks that use data-lang directly */
-    [data-lang="pt"], [data-lang="en"] { display:none; }
-    html[lang="pt-br"] [data-lang="pt"] { display:block; }
-    html[lang="en"]    [data-lang="en"] { display:block; }
-
-    /* HERO CTA */
-    .hero-actions{
-      display:none;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-    html[lang="pt-br"] .hero-actions[data-lang="pt"]{ display:flex; }
-    html[lang="en"]    .hero-actions[data-lang="en"]{ display:flex; }
-    
-    .btn-secondary{
-      background:#fff;
-      border-color:#e5e7eb;
-      color:#0b5563;
-    }
-    .btn-dark{
-      background:#0b5563;
-      border-color:#0b5563;
-      color:#fff;
-    }
-
-    .report-highlights{
-      margin-top:20px;
-      margin-bottom:18px;
-      padding:18px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:12px;
-    }
-
-    .highlights-title{
-      font-size:18px;
-      margin-bottom:10px;
-      font-weight:600;
-    }
-
-    .highlights-list{
-      list-style:none;
-      padding:0;
-      margin:0;
-    }
-
-    .highlights-list li{
-      margin-bottom:8px;
-      line-height:1.5;
-      color:#cbd5e1;
-    }
-
-    .highlights-list li::before{
-      content:"• ";
-      color:#facc15; /* amarelo Jubart */
-      font-weight:700;
-    }
-
   </style>
 </head>
 
@@ -303,7 +244,7 @@
         </div>
 
         <!-- WhatsApp -->
-        <a class="pill" href="https://wa.me/5561993553849?text=Ol%C3%A1!%20Quero%20agendar%20uma%20conversa%20de%2020%20min%20sobre%20os%20relat%C3%B3rios%20da%20JubartData%20e%20entender%20o%20impacto%20para%20nossa%20opera%C3%A7%C3%A3o."
+        <a class="pill" href="https://wa.me/5561993553849"
           target="_blank" rel="noopener noreferrer"
           id="cta_whatsapp_top">
           <span class="dot"></span>
@@ -331,37 +272,6 @@
             Signals on <strong>price</strong>, <strong>discount</strong> and <strong>availability</strong> in Brazilian retail —
             a technical brief to support buying and commercial decisions.
           </p>
-        </div>
-
-
-        <!-- HERO ACTIONS PT -->
-        <div class="hero-actions show block" data-lang="pt">
-          <a class="btn btn-primary" id="btnWhatsReuniaoHero"
-            href="https://wa.me/5561993553849?text=Ol%C3%A1!%20Sou%20%5BNOME%5D%20da%20%5BEMPRESA%5D.%20Quero%20agendar%20uma%20conversa%20estrat%C3%A9gica%20de%2020%20min%20para%20entender%20impactos%20em%20pre%C3%A7o%2C%20dispers%C3%A3o%20e%20posicionamento%20no%20varejo."
-            target="_blank" rel="noopener noreferrer">
-            Agendar conversa (WhatsApp)
-          </a>
-
-          <a class="btn btn-secondary" id="btnVisitSiteHero"
-            href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=cta_institucional&utm_content=hero"
-            target="_blank" rel="noopener noreferrer">
-            Visitar site institucional
-          </a>
-        </div>
-
-        <!-- HERO ACTIONS EN -->
-        <div class="hero-actions block" data-lang="en">
-          <a class="btn btn-primary" id="btnWhatsReuniaoHero_en"
-            href="https://wa.me/5561993553849?text=Hello!%20I%E2%80%99m%20%5BNAME%5D%20from%20%5BCOMPANY%5D.%20I%E2%80%99d%20like%20to%20book%20a%2020-min%20strategy%20call%20to%20understand%20pricing%2C%20dispersion%20and%20positioning%20signals%20in%20Brazilian%20retail."
-            target="_blank" rel="noopener noreferrer">
-            Book a 20-min call (WhatsApp)
-          </a>
-
-          <a class="btn btn-secondary" id="btnVisitSiteHero_en"
-            href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=cta_institucional&utm_content=hero_en"
-            target="_blank" rel="noopener noreferrer">
-            Visit institutional website
-          </a>
         </div>
 
       </div>
@@ -401,7 +311,6 @@
 
       <div class="card report">
         <div>
-
           <div class="eyebrow">
             <span data-lang="pt" class="show inline">Observatório Nacional de Preços do Pescado</span>
             <span data-lang="en" class="inline">National Fish &amp; Seafood Price Observatory</span>
@@ -412,81 +321,97 @@
             <span data-lang="en" class="inline">Latest edition</span>
           </h2>
 
-          <p class="muted" style="margin-bottom:18px">
+
+          <p class="muted" id="reportDesc">
             <span data-lang="pt" class="show inline">
-              Leitura objetiva do varejo brasileiro de pescado, com foco em preço, desconto e disponibilidade.
+              Esta edição traz um recorte objetivo do varejo de pescado no Brasil:
+              <br><br>
+              <strong>O que você encontra</strong><br>
+              • variação semanal por espécie e categoria<br>
+              • leitura de promoções (desconto) e sinais de pressão competitiva<br>
+              • alertas de disponibilidade (rupturas / itens ausentes) quando identificados<br><br>
+              <strong>Para quem é</strong><br>
+              compradores, indústria, distribuidores, importadores e varejo.<br><br>
+              <strong>Tempo de leitura</strong>: 3–6 minutos para capturar os principais sinais.
             </span>
+
             <span data-lang="en" class="inline">
-              Objective reading of Brazil’s seafood retail market, focused on price, discount and availability signals.
+              This edition delivers a concise view of Brazil’s seafood retail landscape:
+              <br><br>
+              <strong>What you get</strong><br>
+              • weekly variation by species and category<br>
+              • promotion signals (discount) and competitive pressure<br>
+              • availability alerts (stock-outs / missing items) when identified<br><br>
+              <strong>Who it’s for</strong><br>
+              buyers, industry, distributors, importers and retail teams.<br><br>
+              <strong>Reading time</strong>: 3–6 minutes to capture the key signals.
             </span>
           </p>
 
-          <!-- 3 PRINCIPAIS SINAIS -->
-          <h3 style="margin:0 0 8px;font-size:16px">
-            <span data-lang="pt" class="show inline">Principais sinais desta edição</span>
-            <span data-lang="en" class="inline">Key signals in this edition</span>
-          </h3>
+          <p class="muted" style="margin-top:14px">
+            <span data-lang="pt" class="show inline">
+              <strong>Sobre a JubartData:</strong>
+              <a href="https://jubartdata.com.br" target="_blank" rel="noopener noreferrer">
+                conheça nossos estudos, metodologia e análises sobre o varejo de pescado no Brasil.
+              </a>
+            </span>
 
-          <ul class="muted" style="margin:0 0 22px;padding-left:18px;line-height:1.6">
-            <li>
-              <span data-lang="pt" class="show inline">
-                <strong>Salmão:</strong> estabilidade nacional com ajustes relevantes em formatos específicos e alta dispersão regional.
-              </span>
-              <span data-lang="en" class="inline">
-                <strong>Salmon:</strong> national stability with tactical adjustments in specific formats and high regional dispersion.
-              </span>
-            </li>
-
-            <li>
-              <span data-lang="pt" class="show inline">
-                <strong>Bacalhau:</strong> normalização pós-sazonal nos preços máximos; espécies premium mantêm patamar.
-              </span>
-              <span data-lang="en" class="inline">
-                <strong>Codfish:</strong> post-season normalization in peak prices; premium species remain stable.
-              </span>
-            </li>
-
-            <li>
-              <span data-lang="pt" class="show inline">
-                <strong>Tilápia:</strong> mercado estruturalmente estável, com movimentos pontuais em cortes estratégicos.
-              </span>
-              <span data-lang="en" class="inline">
-                <strong>Tilapia:</strong> structurally stable market with selective movements in strategic cuts.
-              </span>
-            </li>
-          </ul>
-
-          <!-- CTA LIMPO -->
-          <div class="btn-row" style="margin-bottom:12px">
-
-            <a class="btn btn-primary" id="btnOpenReport"
-              href="/publicacoes/Relatorio-semanal-JubartData.pdf"
+            <span data-lang="en" class="inline">
+              <strong>About JubartData:</strong>
+              <a href="https://jubartdata.com.br" target="_blank" rel="noopener noreferrer">
+                learn more about our methodology and studies on Brazil’s seafood retail market.
+              </a>
+            </span>
+          </p>
+          
+          <div class="btn-row">
+            <a class="btn btn-primary" id="btnOpenReport" href="/publicacoes/Relatorio-semanal-JubartData.pdf"
+              data-fallback="pt"
               target="_blank" rel="noopener noreferrer">
+              ...
               <span data-lang="pt" class="show inline">Abrir relatório (PDF)</span>
               <span data-lang="en" class="inline">Open report (PDF)</span>
             </a>
 
-            <a class="btn btn-secondary" id="cta_whatsapp_meeting"
-              href="https://wa.me/5561993553849?text=Olá! Quero agendar uma conversa estratégica sobre o Observatório Semanal do Pescado."
-              target="_blank" rel="noopener noreferrer">
-              <span data-lang="pt" class="show inline">Agendar conversa</span>
-              <span data-lang="en" class="inline">Book a call</span>
+            <a class="btn" style="background:#fff;border-color:#e5e7eb;color:#0b5563"
+              href="https://wa.me/5561993553849?text=Quero%20receber%20o%20Observat%C3%B3rio%20Semanal%20do%20Pescado%20e%20entender%20os%20planos%20de%20acesso."
+              target="_blank" rel="noopener noreferrer" id="cta_whatsapp_report">
+              <span class="dot"></span>
+              <span data-lang="pt" class="show inline">Receber por WhatsApp</span>
+              <span data-lang="en" class="inline">Get it on WhatsApp</span>
             </a>
 
+            <a class="btn" style="background:#0b5563;border-color:#0b5563;color:#fff"
+              href="https://wa.me/5561993553849?text=Quero%20falar%20sobre%20acesso%20profissional%20aos%20relat%C3%B3rios%20da%20JubartData."
+              target="_blank" rel="noopener noreferrer" id="cta_access">
+              <span data-lang="pt" class="show inline">Acesso profissional</span>
+              <span data-lang="en" class="inline">Professional access</span>
+            </a>
           </div>
 
-          <!-- LINK DISCRETO -->
-          <p class="muted" style="font-size:13px;margin-top:6px">
+          <p class="muted" style="margin-top:10px">
             <span data-lang="pt" class="show inline">
-              Interesse em acesso profissional contínuo?
-              <a href="https://jubartdata.com.br" target="_blank" rel="noopener noreferrer">
-                Conheça a metodologia completa.
-              </a>
+              <strong>Nota metodológica:</strong> coleta sistemática em canais digitais do varejo, padronização por produto e
+              tratamento estatístico para garantir comparabilidade entre redes, regiões e semanas.
             </span>
             <span data-lang="en" class="inline">
-              Interested in continuous professional access?
+              <strong>Methodological note:</strong> systematic collection from retailers’ digital channels, product standardization and
+              statistical treatment to ensure comparability across chains, regions and weeks.
+            </span>
+          </p>
+
+          <p class="muted" style="margin-top:14px">
+            <span data-lang="pt" class="show inline">
+              <strong>Acesse o site institucional da JubartData:</strong>
               <a href="https://jubartdata.com.br" target="_blank" rel="noopener noreferrer">
-                Explore the full methodology.
+                conheça nossos estudos, metodologia e análises sobre o varejo de pescado no Brasil.
+              </a>
+            </span>
+
+            <span data-lang="en" class="inline">
+              <strong>Visit the JubartData institutional website:</strong>
+              <a href="https://jubartdata.com.br" target="_blank" rel="noopener noreferrer">
+                learn more about our methodology and studies on Brazil’s seafood retail market.
               </a>
             </span>
           </p>
@@ -494,17 +419,9 @@
         </div>
 
         <div>
-          <img src="imagens/imagem_relatorio_semanal.png" alt="Relatório Semanal JubartData" />
+          <img src="imagens/imagem_relatorio_semanal.png" alt="Capa do Relatório Semanal JubartData" />
         </div>
-
       </div>
-
-
-
-
-
-
-
     </section>
   </main>
 
@@ -695,56 +612,6 @@
       },
       { passive: true }
     );
-
-        // ========= CTA tracking (meeting / receive / access / visit site) =========
-    function bindCta(id, eventName, placement) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (el.dataset.bound) return;
-      el.dataset.bound = "1";
-      el.addEventListener("click", function () {
-        window.Jubart.pushEvent(eventName, Object.assign({
-          link_url: el.href,
-          link_text: id,
-          placement: placement,
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
-      });
-    }
-
-    // WhatsApp – reunião
-    bindCta("btnWhatsReuniaoHero", "whatsapp_meeting_click", "hero");
-    bindCta("btnWhatsReuniaoHero_en", "whatsapp_meeting_click", "hero_en");
-    bindCta("cta_whatsapp_meeting", "whatsapp_meeting_click", "report_card");
-
-    // WhatsApp – receber
-    bindCta("cta_whatsapp_report", "whatsapp_receive_click", "report_card");
-
-    // WhatsApp – acesso profissional
-    bindCta("cta_access", "whatsapp_access_click", "report_card");
-
-    // Site institucional (botão do hero)
-    bindCta("btnVisitSiteHero", "institutional_site_click", "hero");
-    bindCta("btnVisitSiteHero_en", "institutional_site_click", "hero_en");
-
-    // Site institucional (link textual, se quiser manter e medir)
-    document.querySelectorAll('a[href^="https://jubartdata.com.br"]').forEach((a) => {
-      if (a.dataset.boundInstitutional) return;
-      a.dataset.boundInstitutional = "1";
-      a.addEventListener("click", function () {
-        window.Jubart.pushEvent("institutional_site_click", Object.assign({
-          link_url: a.href,
-          link_text: "institutional_link",
-          placement: "body",
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
-      });
-    });
-
-
-
   </script>
 
 
