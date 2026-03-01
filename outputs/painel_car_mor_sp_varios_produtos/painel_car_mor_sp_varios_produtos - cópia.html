@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17490337789"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-17490337789');
+    </script>
+
+    <meta charset="UTF-8">
+    <title>Painel de Preços - JubartData</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    h1, h2, h3 {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    p, label, select {
+        font-size: 16px;
+    }
+
+    select {
+        width: 100%;
+        font-size: 36px;       /* 👈 Aumenta o texto do seletor */
+        padding: 24px 18px;     /* 👈 Aumenta a área clicável */
+        margin: 16px 0;
+        border: 2px solid #555;
+        border-radius: 6px;
+        background-color: #f8f8f8;
+        font-weight: bold;
+        color: #333;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .logo {
+        width: 100%;
+        max-width: 220px;
+        margin: 10px auto;
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        body {
+        font-size: 17px;
+        }
+        h1 {
+        font-size: 22px;
+        }
+    }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <img src="../../imagens/logo_escura.png" class="logo" alt="logo JubartData">
+        <h1>🛒 Painel de Preços</h1>
+        <p>🕒 <strong>Última atualização:</strong> <span id="data-atualizacao">...</span></p>
+
+        <script>
+        fetch("ultima_data.txt")
+            .then(response => response.text())
+            .then(data => {
+            document.getElementById("data-atualizacao").innerText = data.trim();
+            })
+            .catch(() => {
+            document.getElementById("data-atualizacao").innerText = "indisponível";
+            });
+        </script>
+
+        <label for="categoria">Selecione a categoria de produto:</label>
+        <select id="selector" style="width: 100%; margin-bottom: 1rem;">
+            <option value="">Selecione um produto</option>
+            <option value="frango">Frango</option>
+            <option value="picanha">Picanha</option>
+            <option value="tilápia">Tilápia</option>
+            <option value="camarão">Camarão</option>
+            <option value="salmão">Salmão</option>
+            <option value="bacalhau">Bacalhau</option>
+            <option value="merluza">Merluza</option>
+            <option value="ovos">Ovos</option>
+            <option value="leite">Leite</option>
+            <option value="azeite">Azeite</option>
+            <option value="café">Café</option>
+        </select>
+
+        <!-- Blocos por produto -->
+        <!-- Blocos por produto sem rótulos de texto -->
+        <div id="frango" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/frango.png" width="100%">
+        </div>
+
+        <div id="picanha" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/picanha.png" width="100%">
+        </div>
+
+        <div id="tilápia" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/tilápia.png" width="100%">
+        </div>
+
+        <div id="camarão" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/camarão.png" width="100%">
+        </div>
+
+        <div id="salmão" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/salmão.png" width="100%">
+        </div>
+
+        <div id="bacalhau" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/bacalhau.png" width="100%">
+        </div>
+
+        <div id="merluza" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/merluza.png" width="100%">
+        </div>
+
+        <div id="ovos" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/ovos.png" width="100%">
+        </div>
+
+        <div id="leite" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/leite.png" width="100%">
+        </div>
+
+        <div id="azeite" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/azeite.png" width="100%">
+        </div>
+
+        <div id="café" class="product-block">
+            <img src="../../imagens/imagens_car_mor_sp_varios_produtos/café.png" width="100%">
+        </div>
+
+
+
+
+        <div class="footer">desenvolvido por JubartData</div>
+    </div>
+
+    <script>
+        const produtos = ["frango", "picanha", "tilápia", "camarão", "salmão", "bacalhau", "merluza", "ovos", "leite", "azeite", 'café'];
+
+        document.getElementById("selector").addEventListener("change", function () {
+            produtos.forEach(p => {
+                const el = document.getElementById(p);
+                if (el) el.style.display = "none";
+            });
+
+            const selecionado = this.value;
+            if (selecionado) {
+                const bloco = document.getElementById(selecionado);
+                if (bloco) bloco.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
