@@ -73,7 +73,7 @@
         <h1>🛒 Painel de Preços</h1>
         <p>🕒 <strong>Última atualização:</strong> <span id="data-atualizacao">...</span></p>
 
-        <script>
+        <!--<script>
         fetch("ultima_data.txt")
             .then(response => response.text())
             .then(data => {
@@ -82,6 +82,23 @@
             .catch(() => {
             document.getElementById("data-atualizacao").innerText = "indisponível";
             });
+        </script>-->
+
+        <script>
+        // versão simples baseada no horário de carregamento da página (YYYYMMDDHHmm)
+        const v = new Date().toISOString().slice(0,16).replace(/[-:T]/g,'');
+
+        // fura cache das imagens do painel
+        document.querySelectorAll('.product-block img').forEach(img => {
+            const src = img.getAttribute('src'); // mantém o caminho relativo
+            img.setAttribute('src', src + (src.includes('?') ? '&' : '?') + 'v=' + v);
+        });
+
+        // fura cache do arquivo de data
+        fetch("ultima_data.txt?v=" + v)
+            .then(r => r.text())
+            .then(t => { document.getElementById("data-atualizacao").innerText = t.trim(); })
+            .catch(() => { document.getElementById("data-atualizacao").innerText = "indisponível"; });
         </script>
 
         <label for="categoria">Selecione a categoria de produto:</label>
