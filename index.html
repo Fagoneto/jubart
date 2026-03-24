@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -30,28 +30,39 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5P5K4D5R"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'jubart_page_context',
+      site_section: 'site',
+      page_type: 'home',
+      page_language: 'pt'
+    });
+  </script>
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html" class="logo" data-cta="logo_home">
         <img src="imagens/cauda_jubart.png" alt="JubartData" class="logo-mark" />
         <span>JubartData</span>
       </a>
 
       <nav class="main-nav">
-        <a href="#sobre">A Jubart</a>
-        <a href="#metodologia">Metodologia</a>
-        <a href="#relatorios">Relatórios</a>
-        <a href="relatorio.html?lang=pt">Relatório semanal</a>
-        <a href="#painel">Painel do Pescado</a>
-        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">Contato</a>
+        <a href="#sobre" data-cta="nav_about">A Jubart</a>
+        <a href="#metodologia" data-cta="nav_methodology">Metodologia</a>
+        <a href="#relatorios" data-cta="nav_reports">Relatórios</a>
+        <a href="relatorio.html?lang=pt" data-cta="nav_weekly_report">Relatório semanal</a>
+        <a href="#painel" data-cta="nav_panel_section">Painel do Pescado</a>
+        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer" data-cta="nav_whatsapp">Contato</a>
 
         <div class="lang-toggle" aria-label="Seletor de idioma">
-          <a href="index.html" class="lang-pill active" aria-current="page">
+          <a href="index.html" class="lang-pill active" aria-current="page" data-cta="lang_pt">
             <img class="flag" src="br_flag.png" alt="Português" onerror="this.replaceWith(document.createTextNode('🇧🇷'))">
             <span>PT</span>
           </a>
-          <a href="index_en.html" class="lang-pill">
+          <a href="index_en.html" class="lang-pill" data-cta="lang_en">
             <img class="flag" src="us_flag.png" alt="English" onerror="this.replaceWith(document.createTextNode('🇺🇸'))">
             <span>EN</span>
           </a>
@@ -72,10 +83,16 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-primary"
+               href="https://comex.jubartdata.com.br/"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="hero_panel">
               Acessar Painel do Pescado
             </a>
-            <a class="btn btn-secondary" href="#relatorios">
+            <a class="btn btn-secondary"
+               href="#relatorios"
+               data-cta="hero_reports">
               Ver relatórios
             </a>
           </div>
@@ -155,7 +172,11 @@
           </p>
 
           <div class="panel-actions">
-            <a class="btn btn-primary" href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-primary"
+               href="https://comex.jubartdata.com.br/"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="section_panel">
               Acessar painel
             </a>
           </div>
@@ -206,12 +227,13 @@
           <p class="section-kicker">Relatórios em destaque</p>
           <h3>Acompanhamos atualmente 12 produtos diferentes</h3>
           <p class="reports-intro">
-            Pescados em geral (tilápia, camarão, salmão, bacalhau e merluza) mas também outras proteínas como frango, ovos, carne bovina, bem como azeite, leite, cefé e cerveja.
+            Pescados em geral (tilápia, camarão, salmão, bacalhau e merluza) mas também outras proteínas como frango, ovos, carne bovina, bem como azeite, leite, café e cerveja.
           </p>
           <p class="reports-intro">
             Abaixo, apresentamos dois modelos de acompanhamento: relatórios semanais e relatórios sob encomenda.
           </p>
         </div>
+
         <div class="cards-grid cards-grid--two">
           <article class="card">
             <div class="card-media">
@@ -224,7 +246,11 @@
                 Exemplo de relatório desenvolvido sob encomenda, com foco em preços, dispersão regional, comportamento do varejo e posicionamento competitivo.
               </p>
               <div class="card-actions">
-                <a class="btn btn-primary" href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf" target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-primary"
+                   href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="card_cod_report_pdf">
                   Baixar PDF
                 </a>
               </div>
@@ -235,22 +261,27 @@
             <div class="card-media">
               <img src="imagens/imagem_relatorio_semanal.png" alt="Observatório Nacional de Preços do Pescado" />
             </div>
-            <div class="card-body">            
+            <div class="card-body">
               <p class="card-eyebrow">Relatório semanal</p>
               <h3>Observatório Nacional de Preços do Pescado</h3>
               <p>
                 Exemplo de acompanhamento semanal com leitura de preços, comportamento promocional, dispersão regional e dinâmica do varejo brasileiro de pescado.
               </p>
               <div class="card-actions">
-                <a class="btn btn-primary" href="publicacoes/Relatorio-semanal-JubartData.pdf" target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-primary"
+                   href="publicacoes/Relatorio-semanal-JubartData.pdf"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="card_weekly_report_pdf">
                   Ver última edição
                 </a>
-              </div>  
+              </div>
             </div>
           </article>
         </div>
       </div>
     </section>
+
     <section class="section" id="clientes">
       <div class="container">
         <p class="section-kicker">Clientes e impacto estratégico</p>
@@ -316,7 +347,13 @@
             Para saber mais sobre nossos acompanhamentos e aplicações no seu setor, fale conosco via WhatsApp.
           </p>
           <div class="final-cta-actions">
-            <a class="btn btn-primary" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="btn btn-primary"
+               href="https://wa.me/5561993553849"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="footer_whatsapp">
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>
@@ -331,7 +368,7 @@
       </div>
 
       <div class="footer-copy">
-        © 2026 JubartData. All rights reserved.
+        © 2026 JubartData. Todos os direitos reservados.
       </div>
     </div>
   </footer>

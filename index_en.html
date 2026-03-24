@@ -30,28 +30,39 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5P5K4D5R"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'jubart_page_context',
+      site_section: 'site',
+      page_type: 'home',
+      page_language: 'en'
+    });
+  </script>
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index_en.html" class="logo">
+      <a href="index_en.html" class="logo" data-cta="logo_home">
         <img src="imagens/cauda_jubart.png" alt="JubartData" class="logo-mark" />
         <span>JubartData</span>
       </a>
 
       <nav class="main-nav">
-        <a href="#about">About Jubart</a>
-        <a href="#methodology">Methodology</a>
-        <a href="#reports">Reports</a>
-        <a href="relatorio.html?lang=en">Weekly report</a>
-        <a href="#dashboard">Fish &amp; Seafood Dashboard</a>
-        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">Contact</a>
+        <a href="#about" data-cta="nav_about">About Jubart</a>
+        <a href="#methodology" data-cta="nav_methodology">Methodology</a>
+        <a href="#reports" data-cta="nav_reports">Reports</a>
+        <a href="relatorio.html?lang=en" data-cta="nav_weekly_report">Weekly report</a>
+        <a href="#dashboard" data-cta="nav_panel_section">Fish &amp; Seafood Dashboard</a>
+        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer" data-cta="nav_whatsapp">Contact</a>
 
         <div class="lang-toggle" aria-label="Language selector">
-          <a href="index.html" class="lang-pill">
+          <a href="index.html" class="lang-pill" data-cta="lang_pt">
             <img class="flag" src="br_flag.png" alt="Português" onerror="this.replaceWith(document.createTextNode('🇧🇷'))">
             <span>PT</span>
           </a>
-          <a href="index_en.html" class="lang-pill active" aria-current="page">
+          <a href="index_en.html" class="lang-pill active" aria-current="page" data-cta="lang_en">
             <img class="flag" src="us_flag.png" alt="English" onerror="this.replaceWith(document.createTextNode('🇺🇸'))">
             <span>EN</span>
           </a>
@@ -72,10 +83,16 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer">
-              Access Fish & Seafood Dashboard
+            <a class="btn btn-primary"
+               href="https://comex.jubartdata.com.br/"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="hero_panel">
+              Access Fish &amp; Seafood Dashboard
             </a>
-            <a class="btn btn-secondary" href="#reports">
+            <a class="btn btn-secondary"
+               href="#reports"
+               data-cta="hero_reports">
               View reports
             </a>
           </div>
@@ -143,10 +160,10 @@
       <div class="container panel-grid">
         <div class="panel-copy">
           <p class="section-kicker">Main highlight</p>
-          <h2>Fish & Seafood Dashboard</h2>
+          <h2>Fish &amp; Seafood Dashboard</h2>
           <p class="panel-subtitle">Jubart’s analytical platform for Brazilian fish and seafood foreign trade</p>
           <p>
-            The Fish & Seafood Dashboard organizes foreign trade data into an analytical interface designed to expand the sector’s reading capacity.
+            The Fish &amp; Seafood Dashboard organizes foreign trade data into an analytical interface designed to expand the sector’s reading capacity.
             The tool makes it possible to track flows, species, origins and the historical evolution of the market, supporting recurring analysis and more consistent decisions.
           </p>
           <p>
@@ -155,14 +172,18 @@
           </p>
 
           <div class="panel-actions">
-            <a class="btn btn-primary" href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-primary"
+               href="https://comex.jubartdata.com.br/"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="section_panel">
               Access dashboard
             </a>
           </div>
         </div>
 
         <div class="panel-visual">
-          <img src="imagens/painel_pescado.png" alt="Fish & Seafood Dashboard" />
+          <img src="imagens/painel_pescado.png" alt="Fish &amp; Seafood Dashboard" />
         </div>
       </div>
     </section>
@@ -225,7 +246,11 @@
                 An example of a report developed on demand, focused on prices, regional dispersion, retail behavior and competitive positioning.
               </p>
               <div class="card-actions">
-                <a class="btn btn-primary" href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf" target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-primary"
+                   href="publicacoes/Brazilian-Cod-Fish-Market-Report.pdf"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="card_cod_report_pdf">
                   Download PDF
                 </a>
               </div>
@@ -234,16 +259,20 @@
 
           <article class="card">
             <div class="card-media card-media-weekly">
-              <img src="imagens/imagem_relatorio_semanal.png" alt="National Fish & Seafood Price Observatory" />
+              <img src="imagens/imagem_relatorio_semanal.png" alt="National Fish &amp; Seafood Price Observatory" />
             </div>
             <div class="card-body">
               <p class="card-eyebrow">Weekly report</p>
-              <h3>National Fish & Seafood Price Observatory</h3>
+              <h3>National Fish &amp; Seafood Price Observatory</h3>
               <p>
                 An example of weekly monitoring focused on prices, promotional behavior, regional dispersion and the dynamics of Brazilian fish and seafood retail.
               </p>
               <div class="card-actions">
-                <a class="btn btn-primary" href="publicacoes/Weekly-Report-JubartData.pdf" target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-primary"
+                   href="publicacoes/Weekly-Report-JubartData.pdf"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="card_weekly_report_pdf">
                   View latest edition
                 </a>
               </div>
@@ -318,7 +347,13 @@
             To learn more about our monitoring formats and applications for your sector, talk to us on WhatsApp.
           </p>
           <div class="final-cta-actions">
-            <a class="btn btn-primary" href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="btn btn-primary"
+               href="https://wa.me/5561993553849"
+               target="_blank"
+               rel="noopener noreferrer"
+               data-cta="footer_whatsapp">
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>

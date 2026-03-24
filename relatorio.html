@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -322,38 +322,53 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5P5K4D5R"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'jubart_page_context',
+      site_section: 'report',
+      page_type: 'report_landing',
+      page_language_initial: 'pt',
+      report_id: 'observatorio_pescado',
+      report_year: '2026',
+      report_edition: 'semana_atual'
+    });
+  </script>
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html" class="logo" data-cta="logo_home">
         <img src="imagens/cauda_jubart.png" alt="JubartData" class="logo-mark" />
         <span>JubartData</span>
       </a>
 
       <nav class="main-nav">
-        <a href="index.html">
+        <a href="index.html" data-cta="nav_site_home">
           <span data-lang="pt" class="show inline">A Jubart</span>
           <span data-lang="en" class="inline">Jubart</span>
         </a>
 
-        <a href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer">
+        <a href="https://comex.jubartdata.com.br/" target="_blank" rel="noopener noreferrer" data-cta="nav_panel">
           <span data-lang="pt" class="show inline">Painel do Pescado</span>
           <span data-lang="en" class="inline">Seafood Dashboard</span>
         </a>
 
-        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/5561993553849" target="_blank" rel="noopener noreferrer" data-cta="nav_whatsapp">
           <span data-lang="pt" class="show inline">Contato</span>
           <span data-lang="en" class="inline">Contact</span>
         </a>
+
         <div class="lang-toggle" aria-label="Seletor de idioma">
-        <button id="btnLangPt" class="lang-pill active" data-set-lang="pt" type="button">
+          <button id="btnLangPt" class="lang-pill active" data-set-lang="pt" type="button">
             <img class="flag" src="br_flag.png" alt="Português" onerror="this.replaceWith(document.createTextNode('🇧🇷'))">
             <span>PT</span>
-        </button>
-        <button id="btnLangEn" class="lang-pill" data-set-lang="en" type="button">
+          </button>
+          <button id="btnLangEn" class="lang-pill" data-set-lang="en" type="button">
             <img class="flag" src="us_flag.png" alt="English" onerror="this.replaceWith(document.createTextNode('🇺🇸'))">
             <span>EN</span>
-        </button>
+          </button>
         </div>
       </nav>
     </div>
@@ -399,16 +414,22 @@
             </ul>
 
             <div class="btn-row">
-              <a class="btn btn-primary" id="btnOpenReport"
-                href="publicacoes/Relatorio-semanal-JubartData.pdf"
-                target="_blank" rel="noopener noreferrer">
+              <a class="btn btn-primary"
+                 id="btnOpenReport"
+                 href="publicacoes/Relatorio-semanal-JubartData.pdf"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 data-cta="open_report_pdf">
                 <span data-lang="pt" class="show inline">Abrir relatório (PDF)</span>
                 <span data-lang="en" class="inline">Open report (PDF)</span>
               </a>
 
-              <a class="btn btn-secondary" id="cta_whatsapp_top"
-                href="https://wa.me/5561993553849?text=Olá! Quero conversar sobre o Observatório Semanal do Pescado."
-                target="_blank" rel="noopener noreferrer">
+              <a class="btn btn-secondary"
+                 id="cta_whatsapp_top"
+                 href="https://wa.me/5561993553849?text=Olá! Quero conversar sobre o Observatório Semanal do Pescado."
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 data-cta="whatsapp_top">
                 <span data-lang="pt" class="show inline">WhatsApp</span>
                 <span data-lang="en" class="inline">WhatsApp</span>
               </a>
@@ -418,16 +439,20 @@
               <span data-lang="pt" class="show inline">
                 Interesse em acesso profissional contínuo?
                 <a id="btnVisitSiteHero"
-                  href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=cta_institucional&utm_content=hero"
-                  target="_blank" rel="noopener noreferrer">
+                   href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=relatorio_semanal_2026_semana_atual&utm_content=hero_site_pt"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="visit_site_pt">
                   Conheça o site institucional.
                 </a>
               </span>
               <span data-lang="en" class="inline">
                 Interested in continuous professional access?
                 <a id="btnVisitSiteHero_en"
-                  href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=cta_institucional&utm_content=hero_en"
-                  target="_blank" rel="noopener noreferrer">
+                   href="https://jubartdata.com.br/?utm_source=relatorio&utm_medium=site&utm_campaign=relatorio_semanal_2026_semana_atual&utm_content=hero_site_en"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-cta="visit_site_en">
                   Visit the institutional website.
                 </a>
               </span>
@@ -451,7 +476,8 @@
       </div>
 
       <div class="footer-copy">
-        © <span id="y"></span> JubartData. All rights reserved.
+        <span data-lang="pt" class="show inline">© <span id="y"></span> JubartData. Todos os direitos reservados.</span>
+        <span data-lang="en" class="inline">© <span id="y_en"></span> JubartData. All rights reserved.</span>
       </div>
     </div>
   </footer>
@@ -486,11 +512,17 @@
     })();
 
     const y = document.getElementById("y");
-    if (y) y.textContent = new Date().getFullYear();
+    const yEn = document.getElementById("y_en");
+    const currentYear = new Date().getFullYear();
+    if (y) y.textContent = currentYear;
+    if (yEn) yEn.textContent = currentYear;
+
+    const REPORT_ID = "observatorio_pescado";
+    const REPORT_YEAR = "2026";
+    const REPORT_EDITION = "semana_atual";
 
     const PDF_PT = "publicacoes/Relatorio-semanal-JubartData.pdf";
     const PDF_EN = "publicacoes/Weekly-Report-JubartData.pdf";
-    
     const DEFAULT_LANG = "pt";
 
     function getInitialLang() {
@@ -511,12 +543,23 @@
     function getReportPdf() {
       const forcedPdf = window.Jubart.getParam("pdf");
       if (forcedPdf) return forcedPdf;
-
       return getCurrentLang() === "en" ? PDF_EN : PDF_PT;
     }
 
     const utm = window.Jubart.readUtm();
     const btnOpen = document.getElementById("btnOpenReport");
+
+    function baseReportContext() {
+      return {
+        site_section: "report",
+        page_type: "report_landing",
+        report_id: REPORT_ID,
+        report_year: REPORT_YEAR,
+        report_edition: REPORT_EDITION,
+        page_path: location.pathname,
+        page_lang: getCurrentLang()
+      };
+    }
 
     function syncReportLink() {
       const href = getReportPdf();
@@ -531,12 +574,15 @@
         e.preventDefault();
         syncReportLink();
 
-        window.Jubart.pushEvent("report_open", Object.assign({
-          link_url: el.href,
-          link_text: linkText,
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
+        window.Jubart.pushEvent("report_open", Object.assign(
+          baseReportContext(),
+          {
+            pdf_language: getCurrentLang(),
+            link_url: el.href,
+            link_text: linkText
+          },
+          utm
+        ));
 
         setTimeout(() => {
           window.open(el.href, "_blank", "noopener");
@@ -547,6 +593,8 @@
     bindReportClick(btnOpen, "open_report_button_top");
 
     function setLang(lang) {
+      const previousLang = getCurrentLang();
+
       document.querySelectorAll("[data-lang]").forEach((el) => {
         const isMatch = el.getAttribute("data-lang") === lang;
         el.classList.toggle("show", isMatch);
@@ -558,7 +606,7 @@
       if (bpt) bpt.classList.toggle("active", lang === "pt");
       if (ben) ben.classList.toggle("active", lang === "en");
 
-      document.documentElement.lang = lang === "en" ? "en" : "pt-br";
+      document.documentElement.lang = lang === "en" ? "en" : "pt";
 
       try {
         localStorage.setItem("jubart_lang", lang);
@@ -566,25 +614,45 @@
 
       syncReportLink();
 
-      window.Jubart.pushEvent("lang_change", Object.assign({ language: lang }, utm));
+      if (previousLang !== lang) {
+        window.Jubart.pushEvent("lang_change", Object.assign(
+          baseReportContext(),
+          {
+            previous_language: previousLang,
+            new_language: lang
+          },
+          utm
+        ));
+      }
     }
 
     document.querySelectorAll("[data-set-lang]").forEach((btn) => {
       btn.addEventListener("click", () => setLang(btn.getAttribute("data-set-lang")));
     });
 
-    setLang(getInitialLang());
+    const initialLang = getInitialLang();
+    setLang(initialLang);
+
+    window.Jubart.pushEvent("report_landing_view", Object.assign(
+      baseReportContext(),
+      {
+        page_language_initial: initialLang
+      },
+      utm
+    ));
 
     const waTop = document.getElementById("cta_whatsapp_top");
     if (waTop && !waTop.dataset.bound) {
       waTop.dataset.bound = "1";
       waTop.addEventListener("click", function () {
-        window.Jubart.pushEvent("whatsapp_click", Object.assign({
-          link_url: waTop.href,
-          link_text: "whatsapp_top",
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
+        window.Jubart.pushEvent("whatsapp_click", Object.assign(
+          baseReportContext(),
+          {
+            link_url: waTop.href,
+            link_text: "whatsapp_top"
+          },
+          utm
+        ));
       });
     }
 
@@ -592,12 +660,14 @@
     if (visitSitePt && !visitSitePt.dataset.bound) {
       visitSitePt.dataset.bound = "1";
       visitSitePt.addEventListener("click", function () {
-        window.Jubart.pushEvent("institutional_site_click", Object.assign({
-          link_url: visitSitePt.href,
-          link_text: "visit_site_pt",
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
+        window.Jubart.pushEvent("institutional_site_click", Object.assign(
+          baseReportContext(),
+          {
+            link_url: visitSitePt.href,
+            link_text: "visit_site_pt"
+          },
+          utm
+        ));
       });
     }
 
@@ -605,12 +675,14 @@
     if (visitSiteEn && !visitSiteEn.dataset.bound) {
       visitSiteEn.dataset.bound = "1";
       visitSiteEn.addEventListener("click", function () {
-        window.Jubart.pushEvent("institutional_site_click", Object.assign({
-          link_url: visitSiteEn.href,
-          link_text: "visit_site_en",
-          page_path: location.pathname,
-          page_lang: getCurrentLang(),
-        }, utm));
+        window.Jubart.pushEvent("institutional_site_click", Object.assign(
+          baseReportContext(),
+          {
+            link_url: visitSiteEn.href,
+            link_text: "visit_site_en"
+          },
+          utm
+        ));
       });
     }
   </script>
