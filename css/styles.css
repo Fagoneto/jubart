@@ -297,6 +297,13 @@ h3{
 .card-media img[alt="Observatório Nacional de Preços do Pescado"]{
   object-position:center 12%;
 }
+.card-media img[alt="Cod Market Report"]{
+  object-position:center 32%;
+}
+
+.card-media img[alt="National Fish & Seafood Price Observatory"]{
+  object-position:center 12%;
+}
 
 
 .card-body{
@@ -313,39 +320,66 @@ h3{
   padding-top:18px;
 }
 
-.case-grid{
+
+.case-card{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:30px;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap:18px;
   align-items:center;
   margin-top:28px;
-}
-.case-text{
   background:var(--bg-white);
   border-radius:22px;
   padding:28px;
   box-shadow:var(--card-shadow);
 }
+
+.case-text{
+  padding:0;
+}
+
+.case-image{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 .case-image img{
   width:100%;
-  border-radius:22px;
-  box-shadow:var(--card-shadow);
+  max-width:250px;
+  height:auto;
+  display:block;
+  border-radius:18px;
+  box-shadow:none;
 }
+
 .case-list{
   padding-left:20px;
   color:#3f4b5d;
 }
+
 .testimonial{
-  margin:26px 0 14px;
+  margin:22px 0 10px;
   padding-left:18px;
   border-left:4px solid var(--brand-teal);
   font-size:1.12rem;
   font-weight:700;
   color:var(--text-strong);
 }
+
 .testimonial-author{
   color:var(--text-muted);
+  line-height:1.45;
 }
+
+.testimonial-author strong{
+  display:inline-block;
+  margin-bottom:2px;
+  color:var(--text-strong);
+}
+
+
+
+
 
 .final-cta{
   margin-top:0;
@@ -396,7 +430,8 @@ h3{
   .panel-grid,
   .cards-grid,
   .cards-grid--two,
-  .case-grid{
+  .case-grid,
+  .case-card{
     grid-template-columns:1fr;
   }
 
